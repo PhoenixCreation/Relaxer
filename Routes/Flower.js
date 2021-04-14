@@ -14,12 +14,12 @@ const Flower = () => {
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    progress.value = withRepeat(withTiming(1, { duration: 2000 }), -1, true);
+    progress.value = withRepeat(withTiming(1, { duration: 2500 }), -1, true);
   }, []);
 
   const reset = () => {
     progress.value = 0;
-    progress.value = withRepeat(withTiming(1, { duration: 2000 }), -1, true);
+    progress.value = withRepeat(withTiming(1, { duration: 2500 }), -1, true);
   };
 
   const rotater = useAnimatedStyle(() => {

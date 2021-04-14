@@ -5,7 +5,6 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
-import Svg, { Circle } from "react-native-svg";
 
 const SIZE = 150;
 
@@ -20,39 +19,22 @@ const FlowerLeaves = ({ index, progress }) => {
         { translateX: interpolate(progress.value, [0, 1], [0, x]) },
         { translateY: interpolate(progress.value, [0, 1], [0, y]) },
         { scale: interpolate(progress.value, [0, 1], [0.3, 1]) },
-        // {
-        //   rotate: interpolate(progress.value, [0, 1], [180 * index, 0]) + "deg",
-        // },
       ],
     };
   });
+
+  const borderChanger = useAnimatedStyle(() => {
+    return {
+      borderRadius: interpolate(progress.value, [0, 1], [0, SIZE]),
+    };
+  });
   return (
-    <Animated.View
-      style={[
-        {
-          position: "absolute",
-        },
-        circleStyle,
-      ]}
-    >
-      <View
-        style={
-          {
-            //   borderWidth: 1,
-            //   borderColor: "red",
-          }
-        }
-      >
-        <Svg height={SIZE} width={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`}>
-          <Circle r={SIZE / 2} cx={SIZE / 2} cy={SIZE / 2} fill="#009ca044" />
-        </Svg>
-      </View>
+    <Animated.View style={[{ position: "absolute" }, circleStyle]}>
+      <LinearGradient colors={["#00BFA1", "#009CA0"]} style={styles.circle} />
+      {/* <Animated.View style={[styles.circle, borderChanger]} /> */}
     </Animated.View>
   );
 };
-
-// #00BFA1
-// #009CA0
 
 export default FlowerLeaves;
 
@@ -61,6 +43,7 @@ const styles = StyleSheet.create({
     width: SIZE,
     height: SIZE,
     borderRadius: SIZE,
-    opacity: 0.6,
+    backgroundColor: "#00BFA1",
+    opacity: 0.4,
   },
 });

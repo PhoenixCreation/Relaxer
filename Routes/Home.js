@@ -77,10 +77,11 @@ const Home = () => {
         style={[{ height: "100%", width: "100%" }, scrollStyle]}
         contentContainerStyle={{
           height: "200%",
-          justifyContent: "center",
-          alignItems: "center",
         }}
-      ></Animated.ScrollView>
+      >
+        <Text>Scroll Down to change the colors.</Text>
+        <Text>Drag the ball and release to play with it</Text>
+      </Animated.ScrollView>
       <View style={{ position: "absolute", zIndex: 1 }}>
         <PanGestureHandler onGestureEvent={gestureHandler}>
           <Animated.View style={ballStyle}></Animated.View>
