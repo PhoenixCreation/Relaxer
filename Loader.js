@@ -13,7 +13,7 @@ const defaultSettings = {
   },
   flower: {
     color1: "#00BFA1",
-    color2: "#009CA0",
+    color2: "#007CA0",
     additionalOptions: true,
   },
   others: {

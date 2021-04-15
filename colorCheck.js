@@ -1193,4 +1193,3 @@ function w3trim(x) {
 function isHex(x) {
   return "0123456789ABCDEFabcdef".indexOf(x) > -1;
 }
-cl(toColorObject("yellow"));
