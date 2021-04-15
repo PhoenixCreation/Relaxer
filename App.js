@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StatusBar } from "expo-status-bar";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import {
@@ -12,14 +12,32 @@ import { Text, View } from "react-native";
 import { Feather, Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import Test from "./Routes/Test";
 import Settings from "./Routes/Settings";
+import { LoaderProvider, LoaderContext } from "./Loader";
+import LoadingFlower from "./Components/LoadingFlower";
 
 const Drawer = createDrawerNavigator();
 
 const app = () => {
   return (
+    <LoaderProvider>
+      <Navigator />
+    </LoaderProvider>
+  );
+};
+
+const Navigator = () => {
+  const { loading } = useContext(LoaderContext);
+
+  if (loading) return <LoadingFlower />;
+
+  return (
     <NavigationContainer>
       <StatusBar hidden={true} />
-      <Drawer.Navigator initialRouteName="Home" drawerContent={drawerComopnent}>
+      <Drawer.Navigator
+        initialRouteName="Home"
+        drawerContent={drawerComopnent}
+        detachInactiveScreens={true}
+      >
         <Drawer.Screen
           name="Home"
           component={Home}

@@ -1,159 +1,232 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Divider from "../Components/Helpers/Divider";
+import { LoaderContext } from "../Loader";
 
-const Settings = () => {
+const Settings = ({ navigation }) => {
+  const { settings, setNewSettings, resetSettings } = useContext(LoaderContext);
+
   // Free ball settings
-  const [ballBallColor1, setBallBallColor1] = useState("#ff0000");
-  const [ballBallColor2, setBallBallColor2] = useState("#ffff00");
-  const [ballBackgroundColor1, setBallBackgroundColor1] = useState("#ffffff");
-  const [ballBackgroundColor2, setBallBackgroundColor2] = useState("#000000");
+  const [ballBallColor1, setBallBallColor1] = useState(
+    settings.freeBall.ballColor1
+  );
+  const [ballBallColor2, setBallBallColor2] = useState(
+    settings.freeBall.ballColor2
+  );
+  const [ballBackgroundColor1, setBallBackgroundColor1] = useState(
+    settings.freeBall.backgroundColor1
+  );
+  const [ballBackgroundColor2, setBallBackgroundColor2] = useState(
+    settings.freeBall.backgroundColor2
+  );
 
   // Flower Settings
-  const [flowerColor1, setFlowerColor1] = useState("#00BFA1");
-  const [flowerColor2, setFlowerColor2] = useState("#009CA0");
-  const [flowerAdditionalOptions, setFlowerAdditionalOptions] = useState(true);
+  const [flowerColor1, setFlowerColor1] = useState(settings.flower.color1);
+  const [flowerColor2, setFlowerColor2] = useState(settings.flower.color2);
+  const [flowerAdditionalOptions, setFlowerAdditionalOptions] = useState(
+    settings.flower.additionalOptions
+  );
+
+  // other Settings
+  const [otherTheme, setOtherTheme] = useState(settings.others.theme);
+
+  useEffect(() => {
+    setBallBallColor1(settings.freeBall.ballColor1);
+    setBallBallColor2(settings.freeBall.ballColor2);
+    setBallBackgroundColor1(settings.freeBall.backgroundColor1);
+    setBallBackgroundColor2(settings.freeBall.backgroundColor2);
+    setFlowerColor1(settings.flower.color1);
+    setFlowerColor2(settings.flower.color2);
+    setFlowerAdditionalOptions(settings.flower.additionalOptions);
+    setOtherTheme(settings.others.theme);
+  }, [settings]);
+
+  const saveSettings = () => {
+    const newSettings = {
+      freeBall: {
+        ballColor1: ballBallColor1,
+        ballColor2: ballBallColor2,
+        backgroundColor1: ballBackgroundColor1,
+        backgroundColor2: ballBackgroundColor2,
+      },
+      flower: {
+        color1: flowerColor1,
+        color2: flowerColor2,
+        additionalOptions: flowerAdditionalOptions,
+      },
+      others: {
+        theme: otherTheme,
+      },
+    };
+    setNewSettings(newSettings);
+  };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.heading}>
-        <Text style={styles.headingText}>Settings</Text>
-      </View>
-      <Divider size={1.5} color="#212121" margin={5} />
-      <View style={styles.screenHeading}>
-        <Text style={styles.screenHeadingText}>Free Ball</Text>
-      </View>
-      <View style={styles.advice}>
-        <Text style={styles.adviceText}>
-          Do whatever you want to do with colors. Just make sure to not have
-          same colors for ball and background.
-        </Text>
-      </View>
-      <Divider size={1} color="#313131" margin={5} />
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Ball color 1:</Text>
-        <View style={{ flexDirection: "row" }}>
-          <View
-            style={{ ...styles.colorBox, backgroundColor: ballBallColor1 }}
-          />
+    <View style={styles.container}>
+      <Pressable style={styles.saveButton} onPress={saveSettings}>
+        <MaterialCommunityIcons name="content-save" size={28} color="white" />
+      </Pressable>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.heading}>
+          <Text style={styles.headingText}>Settings</Text>
+        </View>
+        <View style={styles.advice}>
+          <Text style={styles.adviceText}>
+            If colors does not reflect instantly then refresh the app once or go
+            to hell.
+          </Text>
+        </View>
+        <Divider size={1.5} color="#212121" margin={5} />
+        <View style={styles.screenHeading}>
+          <Text style={styles.screenHeadingText}>Free Ball</Text>
+        </View>
+        <View style={styles.advice}>
+          <Text style={styles.adviceText}>
+            Do whatever you want to do with colors. Just make sure to not have
+            same colors for ball and background.
+          </Text>
+        </View>
+        <Divider size={1} color="#313131" margin={5} />
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Ball color 1:</Text>
+          <View style={{ flexDirection: "row" }}>
+            <View
+              style={{ ...styles.colorBox, backgroundColor: ballBallColor1 }}
+            />
+            <TextInput
+              value={ballBallColor1}
+              onChangeText={(e) => setBallBallColor1(e)}
+              style={styles.inputBox}
+            ></TextInput>
+          </View>
+        </View>
+        <Divider size={1} color="#414141" margin={5} />
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Ball color 2:</Text>
+          <View style={{ flexDirection: "row" }}>
+            <View
+              style={{ ...styles.colorBox, backgroundColor: ballBallColor2 }}
+            />
+            <TextInput
+              value={ballBallColor2}
+              onChangeText={(e) => setBallBallColor2(e)}
+              style={styles.inputBox}
+            ></TextInput>
+          </View>
+        </View>
+        <Divider size={1} color="#414141" margin={5} />
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Background color 1:</Text>
+          <View style={{ flexDirection: "row" }}>
+            <View
+              style={{
+                ...styles.colorBox,
+                backgroundColor: ballBackgroundColor1,
+              }}
+            />
+            <TextInput
+              value={ballBackgroundColor1}
+              onChangeText={(e) => setBallBackgroundColor1(e)}
+              style={styles.inputBox}
+            ></TextInput>
+          </View>
+        </View>
+        <Divider size={1} color="#414141" margin={5} />
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Background color 2:</Text>
+          <View style={{ flexDirection: "row" }}>
+            <View
+              style={{
+                ...styles.colorBox,
+                backgroundColor: ballBackgroundColor2,
+              }}
+            />
+            <TextInput
+              value={ballBackgroundColor2}
+              onChangeText={(e) => setBallBackgroundColor2(e)}
+              style={styles.inputBox}
+            ></TextInput>
+          </View>
+        </View>
+        <Divider size={1} color="#414141" margin={5} />
+        <View style={styles.screenHeading}>
+          <Text style={styles.screenHeadingText}>Flower</Text>
+        </View>
+        <View style={styles.advice}>
+          <Text style={styles.adviceText}>
+            This is gardient colors, make sure you select close colors for
+            better expirience. OR you can just have fun.
+          </Text>
+        </View>
+        <Divider size={1} color="#313131" margin={5} />
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Flower color 1:</Text>
+          <View style={{ flexDirection: "row" }}>
+            <View
+              style={{
+                ...styles.colorBox,
+                backgroundColor: flowerColor1,
+              }}
+            />
+            <TextInput
+              value={flowerColor1}
+              onChangeText={(e) => setFlowerColor1(e)}
+              style={styles.inputBox}
+            ></TextInput>
+          </View>
+        </View>
+        <Divider size={1} color="#414141" margin={5} />
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Flower color 2:</Text>
+          <View style={{ flexDirection: "row" }}>
+            <View
+              style={{
+                ...styles.colorBox,
+                backgroundColor: flowerColor2,
+              }}
+            />
+            <TextInput
+              value={flowerColor2}
+              onChangeText={(e) => setFlowerColor2(e)}
+              style={styles.inputBox}
+            ></TextInput>
+          </View>
+        </View>
+        <Divider size={1} color="#414141" margin={5} />
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Addition options:</Text>
+          <Text>CheckBox TODO</Text>
+        </View>
+        <Divider size={1} color="#414141" margin={5} />
+        <View style={styles.screenHeading}>
+          <Text style={styles.screenHeadingText}>Other</Text>
+        </View>
+        <View style={styles.advice}>
+          <Text style={styles.adviceText}>I don't know what to put here.</Text>
+        </View>
+        <Divider size={1} color="#313131" margin={5} />
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Theme</Text>
           <TextInput
-            value={ballBallColor1}
-            onChangeText={(e) => setBallBallColor1(e)}
+            value={otherTheme}
+            onChangeText={(e) => setOtherTheme(e)}
             style={styles.inputBox}
           ></TextInput>
         </View>
-      </View>
-      <Divider size={1} color="#414141" margin={5} />
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Ball color 2:</Text>
-        <View style={{ flexDirection: "row" }}>
-          <View
-            style={{ ...styles.colorBox, backgroundColor: ballBallColor2 }}
-          />
-          <TextInput
-            value={ballBallColor2}
-            onChangeText={(e) => setBallBallColor2(e)}
-            style={styles.inputBox}
-          ></TextInput>
-        </View>
-      </View>
-      <Divider size={1} color="#414141" margin={5} />
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Background color 1:</Text>
-        <View style={{ flexDirection: "row" }}>
-          <View
-            style={{
-              ...styles.colorBox,
-              backgroundColor: ballBackgroundColor1,
+        <View style={styles.someSpaceForSaveButton}>
+          <Pressable
+            style={styles.resetButton}
+            onPress={() => {
+              resetSettings();
             }}
-          />
-          <TextInput
-            value={ballBackgroundColor1}
-            onChangeText={(e) => setBallBackgroundColor1(e)}
-            style={styles.inputBox}
-          ></TextInput>
+          >
+            <MaterialCommunityIcons name="lock-reset" size={28} color="white" />
+          </Pressable>
         </View>
-      </View>
-      <Divider size={1} color="#414141" margin={5} />
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Background color 2:</Text>
-        <View style={{ flexDirection: "row" }}>
-          <View
-            style={{
-              ...styles.colorBox,
-              backgroundColor: ballBackgroundColor2,
-            }}
-          />
-          <TextInput
-            value={ballBackgroundColor2}
-            onChangeText={(e) => setBallBackgroundColor2(e)}
-            style={styles.inputBox}
-          ></TextInput>
-        </View>
-      </View>
-      <Divider size={1} color="#414141" margin={5} />
-      <View style={styles.screenHeading}>
-        <Text style={styles.screenHeadingText}>Flower</Text>
-      </View>
-      <View style={styles.advice}>
-        <Text style={styles.adviceText}>
-          This is gardient colors, make sure you select close colors for better
-          expirience. OR you can just have fun.
-        </Text>
-      </View>
-      <Divider size={1} color="#313131" margin={5} />
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Flower color 1:</Text>
-        <View style={{ flexDirection: "row" }}>
-          <View
-            style={{
-              ...styles.colorBox,
-              backgroundColor: flowerColor1,
-            }}
-          />
-          <TextInput
-            value={flowerColor1}
-            onChangeText={(e) => setFlowerColor1(e)}
-            style={styles.inputBox}
-          ></TextInput>
-        </View>
-      </View>
-      <Divider size={1} color="#414141" margin={5} />
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Flower color 2:</Text>
-        <View style={{ flexDirection: "row" }}>
-          <View
-            style={{
-              ...styles.colorBox,
-              backgroundColor: flowerColor2,
-            }}
-          />
-          <TextInput
-            value={flowerColor2}
-            onChangeText={(e) => setFlowerColor2(e)}
-            style={styles.inputBox}
-          ></TextInput>
-        </View>
-      </View>
-      <Divider size={1} color="#414141" margin={5} />
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Addition options:</Text>
-        <Text>CheckBox TODO</Text>
-      </View>
-      <Divider size={1} color="#414141" margin={5} />
-      <View style={styles.screenHeading}>
-        <Text style={styles.screenHeadingText}>Other</Text>
-      </View>
-      <View style={styles.advice}>
-        <Text style={styles.adviceText}>I don't know what to put here.</Text>
-      </View>
-      <Divider size={1} color="#313131" margin={5} />
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Theme</Text>
-        <TextInput value="Dark" style={styles.inputBox}></TextInput>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -162,6 +235,9 @@ export default Settings;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
+  },
+  scrollView: {
     paddingHorizontal: 5,
   },
   heading: {
@@ -214,5 +290,26 @@ const styles = StyleSheet.create({
   },
   adviceText: {
     color: "#616161",
+  },
+  saveButton: {
+    position: "absolute",
+    backgroundColor: "#1263f1",
+    zIndex: 10,
+    bottom: 0,
+    right: 0,
+    margin: 20,
+    padding: 10,
+    borderRadius: 100,
+  },
+  someSpaceForSaveButton: {
+    height: 85,
+    justifyContent: "center",
+  },
+  resetButton: {
+    backgroundColor: "#1263f1",
+    width: 50,
+    padding: 10,
+    marginLeft: 10,
+    borderRadius: 100,
   },
 });

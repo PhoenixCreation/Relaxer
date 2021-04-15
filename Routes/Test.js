@@ -1,10 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { w3color } from "../colorCheck";
 
 const Test = () => {
+  const colorString = new w3color("#f0f453");
+
   return (
     <View style={styles.container}>
-      <Text>This is test slide</Text>
+      <Text>{JSON.stringify(colorString)}</Text>
     </View>
   );
 };

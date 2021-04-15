@@ -1,17 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
-import { LoaderContext } from "../Loader";
 
 const SIZE = 150;
 
-const FlowerLeaves = ({ index, progress }) => {
-  const { settings } = useContext(LoaderContext);
-
+const LoadingFlowerLeaves = ({ index, progress }) => {
   const theta = (index * 2 * Math.PI) / 6;
   const x = (SIZE / 2) * Math.cos(theta);
   const y = (SIZE / 2) * Math.sin(theta);
@@ -28,16 +25,13 @@ const FlowerLeaves = ({ index, progress }) => {
 
   return (
     <Animated.View style={[{ position: "absolute" }, circleStyle]}>
-      <LinearGradient
-        colors={[settings.flower.color1, settings.flower.color2]}
-        style={styles.circle}
-      />
+      <LinearGradient colors={["#00BFA1", "#00A1F1"]} style={styles.circle} />
       {/* <Animated.View style={[styles.circle]} /> */}
     </Animated.View>
   );
 };
 
-export default FlowerLeaves;
+export default LoadingFlowerLeaves;
 
 const styles = StyleSheet.create({
   circle: {

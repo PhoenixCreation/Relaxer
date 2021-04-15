@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text, View, Vibration, Dimensions } from "react-native";
 import Animated, {
   interpolate,
@@ -6,12 +6,13 @@ import Animated, {
   useSharedValue,
   useAnimatedScrollHandler,
   useAnimatedGestureHandler,
-  withTiming,
   withSpring,
   runOnJS,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Flower from "./Flower";
+import { LoaderContext } from "../Loader";
+import { w3color } from "../colorCheck";
 
 const { width, height } = Dimensions.get("window");
 
@@ -20,6 +21,21 @@ const SPRING_CONFIG = {
 };
 
 const Home = () => {
+  const { settings } = useContext(LoaderContext);
+
+  const transformColor = (color) => {
+    return {
+      r: new w3color(color).red,
+      g: new w3color(color).green,
+      b: new w3color(color).blue,
+    };
+  };
+
+  const color1 = transformColor(settings.freeBall.ballColor1);
+  const color2 = transformColor(settings.freeBall.ballColor2);
+  const backColor1 = transformColor(settings.freeBall.backgroundColor1);
+  const backColor2 = transformColor(settings.freeBall.backgroundColor2);
+
   const touchX = useSharedValue(0);
   const touchY = useSharedValue(0);
   const scroll = useSharedValue(0);
@@ -41,9 +57,21 @@ const Home = () => {
   });
 
   const ballStyle = useAnimatedStyle(() => {
-    const r = interpolate(scroll.value, [-50, 0, 500], [12, 255, 255]);
-    const g = interpolate(scroll.value, [-50, 0, 500], [12, 0, 155]);
-    const b = interpolate(scroll.value, [-50, 0, 500], [12, 0, 12]);
+    const r = interpolate(
+      scroll.value,
+      [-50, 0, 500],
+      [12, color1.r, color2.r]
+    );
+    const g = interpolate(
+      scroll.value,
+      [-50, 0, 500],
+      [12, color1.g, color2.g]
+    );
+    const b = interpolate(
+      scroll.value,
+      [-50, 0, 500],
+      [12, color1.b, color2.b]
+    );
     return {
       width: 80,
       height: 80,
@@ -62,9 +90,21 @@ const Home = () => {
   });
 
   const scrollStyle = useAnimatedStyle(() => {
-    const r = interpolate(scroll.value, [-50, 0, 500], [12, 255, 12]);
-    const g = interpolate(scroll.value, [-50, 0, 500], [12, 255, 12]);
-    const b = interpolate(scroll.value, [-50, 0, 500], [12, 255, 12]);
+    const r = interpolate(
+      scroll.value,
+      [-50, 0, 500],
+      [12, backColor1.r, backColor2.r]
+    );
+    const g = interpolate(
+      scroll.value,
+      [-50, 0, 500],
+      [12, backColor1.g, backColor2.g]
+    );
+    const b = interpolate(
+      scroll.value,
+      [-50, 0, 500],
+      [12, backColor1.b, backColor2.b]
+    );
     return {
       backgroundColor: `rgb(${r},${g},${b})`,
     };
