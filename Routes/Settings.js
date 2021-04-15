@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Divider from "../Components/Helpers/Divider";
 
 const Settings = () => {
+  // Free ball settings
+  const [ballBallColor1, setBallBallColor1] = useState("#ff0000");
+  const [ballBallColor2, setBallBallColor2] = useState("#ffff00");
+  const [ballBackgroundColor1, setBallBackgroundColor1] = useState("#ffffff");
+  const [ballBackgroundColor2, setBallBackgroundColor2] = useState("#000000");
+
+  // Flower Settings
+  const [flowerColor1, setFlowerColor1] = useState("#00BFA1");
+  const [flowerColor2, setFlowerColor2] = useState("#009CA0");
+  const [flowerAdditionalOptions, setFlowerAdditionalOptions] = useState(true);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.heading}>
@@ -24,31 +35,62 @@ const Settings = () => {
         <Text style={styles.optionText}>Ball color 1:</Text>
         <View style={{ flexDirection: "row" }}>
           <View
-            style={{
-              width: 30,
-              height: 30,
-              backgroundColor: "red",
-              borderRadius: 10,
-              marginRight: 5,
-            }}
+            style={{ ...styles.colorBox, backgroundColor: ballBallColor1 }}
           />
-          <TextInput value="#ff0000" style={styles.inputBox}></TextInput>
+          <TextInput
+            value={ballBallColor1}
+            onChangeText={(e) => setBallBallColor1(e)}
+            style={styles.inputBox}
+          ></TextInput>
         </View>
       </View>
       <Divider size={1} color="#414141" margin={5} />
       <View style={styles.option}>
         <Text style={styles.optionText}>Ball color 2:</Text>
-        <TextInput value="#ffff22" style={styles.inputBox}></TextInput>
+        <View style={{ flexDirection: "row" }}>
+          <View
+            style={{ ...styles.colorBox, backgroundColor: ballBallColor2 }}
+          />
+          <TextInput
+            value={ballBallColor2}
+            onChangeText={(e) => setBallBallColor2(e)}
+            style={styles.inputBox}
+          ></TextInput>
+        </View>
       </View>
       <Divider size={1} color="#414141" margin={5} />
       <View style={styles.option}>
         <Text style={styles.optionText}>Background color 1:</Text>
-        <TextInput value="#ffffff" style={styles.inputBox}></TextInput>
+        <View style={{ flexDirection: "row" }}>
+          <View
+            style={{
+              ...styles.colorBox,
+              backgroundColor: ballBackgroundColor1,
+            }}
+          />
+          <TextInput
+            value={ballBackgroundColor1}
+            onChangeText={(e) => setBallBackgroundColor1(e)}
+            style={styles.inputBox}
+          ></TextInput>
+        </View>
       </View>
       <Divider size={1} color="#414141" margin={5} />
       <View style={styles.option}>
         <Text style={styles.optionText}>Background color 2:</Text>
-        <TextInput value="#000000" style={styles.inputBox}></TextInput>
+        <View style={{ flexDirection: "row" }}>
+          <View
+            style={{
+              ...styles.colorBox,
+              backgroundColor: ballBackgroundColor2,
+            }}
+          />
+          <TextInput
+            value={ballBackgroundColor2}
+            onChangeText={(e) => setBallBackgroundColor2(e)}
+            style={styles.inputBox}
+          ></TextInput>
+        </View>
       </View>
       <Divider size={1} color="#414141" margin={5} />
       <View style={styles.screenHeading}>
@@ -63,12 +105,36 @@ const Settings = () => {
       <Divider size={1} color="#313131" margin={5} />
       <View style={styles.option}>
         <Text style={styles.optionText}>Flower color 1:</Text>
-        <TextInput value="#00BFA1" style={styles.inputBox}></TextInput>
+        <View style={{ flexDirection: "row" }}>
+          <View
+            style={{
+              ...styles.colorBox,
+              backgroundColor: flowerColor1,
+            }}
+          />
+          <TextInput
+            value={flowerColor1}
+            onChangeText={(e) => setFlowerColor1(e)}
+            style={styles.inputBox}
+          ></TextInput>
+        </View>
       </View>
       <Divider size={1} color="#414141" margin={5} />
       <View style={styles.option}>
         <Text style={styles.optionText}>Flower color 2:</Text>
-        <TextInput value="#009CA0" style={styles.inputBox}></TextInput>
+        <View style={{ flexDirection: "row" }}>
+          <View
+            style={{
+              ...styles.colorBox,
+              backgroundColor: flowerColor2,
+            }}
+          />
+          <TextInput
+            value={flowerColor2}
+            onChangeText={(e) => setFlowerColor2(e)}
+            style={styles.inputBox}
+          ></TextInput>
+        </View>
       </View>
       <Divider size={1} color="#414141" margin={5} />
       <View style={styles.option}>
@@ -87,7 +153,6 @@ const Settings = () => {
         <Text style={styles.optionText}>Theme</Text>
         <TextInput value="Dark" style={styles.inputBox}></TextInput>
       </View>
-      <Divider size={1} color="#414141" margin={5} />
     </ScrollView>
   );
 };
@@ -134,6 +199,14 @@ const styles = StyleSheet.create({
     borderColor: "black",
     paddingHorizontal: 10,
     borderRadius: 10,
+  },
+  colorBox: {
+    width: 30,
+    height: 30,
+    borderRadius: 10,
+    borderColor: "black",
+    borderWidth: 1,
+    marginRight: 5,
   },
   advice: {
     padding: 5,
