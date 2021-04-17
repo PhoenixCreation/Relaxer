@@ -20,6 +20,7 @@ const Drawer = createDrawerNavigator();
 const app = () => {
   return (
     <LoaderProvider>
+      <StatusBar hidden={true} />
       <Navigator />
     </LoaderProvider>
   );
@@ -32,7 +33,6 @@ const Navigator = () => {
 
   return (
     <NavigationContainer>
-      <StatusBar hidden={true} />
       <Drawer.Navigator
         initialRouteName="Home"
         drawerContent={drawerComopnent}

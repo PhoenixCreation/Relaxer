@@ -1,13 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { w3color } from "../colorCheck";
+import { Divider } from "phoenix-rn-helper";
+console.log(Divider);
 
 const Test = () => {
-  const colorString = new w3color("#f0f453");
-
   return (
     <View style={styles.container}>
-      <Text>{JSON.stringify(colorString)}</Text>
+      <Text>Test</Text>
+      <Divider size={40} margin={20} color="#ff5667" />
     </View>
   );
 };
