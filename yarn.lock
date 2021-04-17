@@ -5175,10 +5175,10 @@ phin@^2.9.1:
   resolved "https://registry.yarnpkg.com/phin/-/phin-2.9.3.tgz#f9b6ac10a035636fb65dfc576aaaa17b8743125c"
   integrity sha512-CzFr90qM24ju5f88quFC/6qohjC144rehe5n6DH900lgXmUe86+xCKc10ev56gRKC4/BkHUoG4uSiQgBiIXwDA==
 
-phoenix-rn-helper@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/phoenix-rn-helper/-/phoenix-rn-helper-0.1.1.tgz#259dfe2a11a9d24de7e915371f8b00634e80ce83"
-  integrity sha512-Bhl/FAxhGgrqXTEED4F2TDuktnEMa5zJrVoF2fBPyZ3u0u7NxOcqpEAtWC46ViL1Jz1Z9mZm0mMws8VxU2aYAg==
+phoenix-rn-helper@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/phoenix-rn-helper/-/phoenix-rn-helper-0.2.1.tgz#e588f67fab9d51b377dc0d4a283b20862220710f"
+  integrity sha512-JAPhODWhhmDaaO7lsSSs1p3JHbIaMIMbrmolfKexe9AGqSw3bxkETv4unDEuh91KmqkZqlVadA/A/jsJT1zvDA==
 
 pify@^4.0.1:
   version "4.0.1"

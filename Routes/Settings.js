@@ -4,6 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Divider from "../Components/Helpers/Divider";
 import { LoaderContext } from "../Loader";
+import ColorSelector from "../Components/Helpers/ColorSelector";
 
 const Settings = ({ navigation }) => {
   const { settings, setNewSettings, resetSettings } = useContext(LoaderContext);
@@ -92,8 +93,9 @@ const Settings = ({ navigation }) => {
         <View style={styles.option}>
           <Text style={styles.optionText}>Ball color 1:</Text>
           <View style={{ flexDirection: "row" }}>
-            <View
-              style={{ ...styles.colorBox, backgroundColor: ballBallColor1 }}
+            <ColorSelector
+              value={ballBallColor1}
+              onChange={(color) => setBallBallColor1(color)}
             />
             <TextInput
               value={ballBallColor1}
@@ -106,8 +108,9 @@ const Settings = ({ navigation }) => {
         <View style={styles.option}>
           <Text style={styles.optionText}>Ball color 2:</Text>
           <View style={{ flexDirection: "row" }}>
-            <View
-              style={{ ...styles.colorBox, backgroundColor: ballBallColor2 }}
+            <ColorSelector
+              value={ballBallColor2}
+              onChange={(color) => setBallBallColor2(color)}
             />
             <TextInput
               value={ballBallColor2}
@@ -120,11 +123,9 @@ const Settings = ({ navigation }) => {
         <View style={styles.option}>
           <Text style={styles.optionText}>Background color 1:</Text>
           <View style={{ flexDirection: "row" }}>
-            <View
-              style={{
-                ...styles.colorBox,
-                backgroundColor: ballBackgroundColor1,
-              }}
+            <ColorSelector
+              value={ballBackgroundColor1}
+              onChange={(color) => setBallBackgroundColor1(color)}
             />
             <TextInput
               value={ballBackgroundColor1}
@@ -137,11 +138,9 @@ const Settings = ({ navigation }) => {
         <View style={styles.option}>
           <Text style={styles.optionText}>Background color 2:</Text>
           <View style={{ flexDirection: "row" }}>
-            <View
-              style={{
-                ...styles.colorBox,
-                backgroundColor: ballBackgroundColor2,
-              }}
+            <ColorSelector
+              value={ballBackgroundColor2}
+              onChange={(color) => setBallBackgroundColor2(color)}
             />
             <TextInput
               value={ballBackgroundColor2}
@@ -164,11 +163,9 @@ const Settings = ({ navigation }) => {
         <View style={styles.option}>
           <Text style={styles.optionText}>Flower color 1:</Text>
           <View style={{ flexDirection: "row" }}>
-            <View
-              style={{
-                ...styles.colorBox,
-                backgroundColor: flowerColor1,
-              }}
+            <ColorSelector
+              value={flowerColor1}
+              onChange={(color) => setFlowerColor1(color)}
             />
             <TextInput
               value={flowerColor1}
@@ -181,11 +178,9 @@ const Settings = ({ navigation }) => {
         <View style={styles.option}>
           <Text style={styles.optionText}>Flower color 2:</Text>
           <View style={{ flexDirection: "row" }}>
-            <View
-              style={{
-                ...styles.colorBox,
-                backgroundColor: flowerColor2,
-              }}
+            <ColorSelector
+              value={flowerColor2}
+              onChange={(color) => setFlowerColor2(color)}
             />
             <TextInput
               value={flowerColor2}
