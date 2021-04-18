@@ -10,6 +10,7 @@ const defaultSettings = {
     ballColor2: "#ffff00",
     backgroundColor1: "#ffffff",
     backgroundColor2: "#000000",
+    string: true,
   },
   flower: {
     color1: "#00BFA1",

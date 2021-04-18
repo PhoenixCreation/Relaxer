@@ -1,19 +1,20 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Divider, ColorSelector } from "phoenix-rn-helper";
+import CheckBox from "../Components/Helpers/CheckBox";
+// import { Divider, ColorSelector } from "phoenix-rn-helper";
 
 const Test = () => {
-  const [check, setCheck] = React.useState("#ff0000");
+  const [check, setCheck] = React.useState(true);
   return (
     <View style={styles.container}>
       <Text>Test</Text>
-      <ColorSelector
+      <CheckBox
         value={check}
-        onChange={(color) => setCheck(color)}
-        style={{ width: 100, height: 100 }}
+        onChange={(e) => setCheck(e)}
+        boxStyle={{ width: 50, height: 40, borderRadius: 0 }}
+        TrueComponent={() => <Text style={{ color: "blue" }}>True</Text>}
+        FalseCoponent={() => <Text style={{ color: "red" }}>False</Text>}
       />
-      <Text>{check}</Text>
-      <Divider size={2} color={"black"} margin={10} />
     </View>
   );
 };

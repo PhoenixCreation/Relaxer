@@ -3,18 +3,22 @@ import { StyleSheet, Text, View, Vibration, Dimensions } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
+  useAnimatedProps,
   useSharedValue,
   useAnimatedScrollHandler,
   useAnimatedGestureHandler,
   withSpring,
   runOnJS,
+  Extrapolate,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
-import Flower from "./Flower";
 import { LoaderContext } from "../Loader";
 import { w3color } from "../colorCheck";
+import Svg, { Circle, Line } from "react-native-svg";
 
 const { width, height } = Dimensions.get("window");
+
+const AnimatedLine = Animated.createAnimatedComponent(Line);
 
 const SPRING_CONFIG = {
   damping: 5,
@@ -109,6 +113,33 @@ const Home = () => {
       backgroundColor: `rgb(${r},${g},${b})`,
     };
   });
+
+  const LineProps = useAnimatedProps(() => {
+    const r = interpolate(
+      scroll.value,
+      [-50, 0, 500],
+      [12, backColor2.r, backColor1.r],
+      Extrapolate.CLAMP
+    );
+    const g = interpolate(
+      scroll.value,
+      [-50, 0, 500],
+      [12, backColor2.g, backColor1.g],
+      Extrapolate.CLAMP
+    );
+    const b = interpolate(
+      scroll.value,
+      [-50, 0, 500],
+      [12, backColor2.b, backColor1.b],
+      Extrapolate.CLAMP
+    );
+    return {
+      x2: withSpring(touchX.value + width / 2, SPRING_CONFIG),
+      y2: withSpring(touchY.value + height / 2, SPRING_CONFIG),
+      stroke: `rgb(${r},${g},${b})`,
+    };
+  });
+
   return (
     <View style={styles.container}>
       <Animated.ScrollView
@@ -123,6 +154,26 @@ const Home = () => {
         <Text>Drag the ball and release to play with it</Text>
       </Animated.ScrollView>
       <View style={{ position: "absolute", zIndex: 1 }}>
+        {settings.freeBall.string && (
+          <Svg
+            width={width}
+            height={height}
+            viewBox={`0 0 ${width} ${height}`}
+            style={{
+              position: "absolute",
+              top: -height / 2 + 40,
+              left: -width / 2 + 40,
+            }}
+          >
+            <AnimatedLine
+              x1={width / 2}
+              y1={height / 2}
+              strokeWidth={2}
+              animatedProps={LineProps}
+            />
+            <Circle r={10} cx={width / 2} cy={height / 2} fill="blue" />
+          </Svg>
+        )}
         <PanGestureHandler onGestureEvent={gestureHandler}>
           <Animated.View style={ballStyle}></Animated.View>
         </PanGestureHandler>

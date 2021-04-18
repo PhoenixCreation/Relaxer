@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import Animated, {
   Easing,
@@ -9,8 +9,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import FlowerLeaves from "../Components/FlowerLeaves";
+import { LoaderContext } from "../Loader";
 
 const Flower = () => {
+  const { settings } = useContext(LoaderContext);
   const progress = useSharedValue(0);
 
   useEffect(() => {
@@ -51,11 +53,13 @@ const Flower = () => {
           })}
         </Animated.View>
       </View>
-      <Button
-        title="RESET"
-        onPress={reset}
-        style={{ position: "absolute", top: 0, left: 0 }}
-      />
+      {settings.flower.additionalOptions && (
+        <Button
+          title="RESET"
+          onPress={reset}
+          style={{ position: "absolute", top: 0, left: 0 }}
+        />
+      )}
       <Button
         title="Stop"
         onPress={() => (progress.value = 1)}

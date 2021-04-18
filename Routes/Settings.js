@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Divider from "../Components/Helpers/Divider";
 import { LoaderContext } from "../Loader";
 import ColorSelector from "../Components/Helpers/ColorSelector";
+import CheckBox from "../Components/Helpers/CheckBox";
 
 const Settings = ({ navigation }) => {
   const { settings, setNewSettings, resetSettings } = useContext(LoaderContext);
@@ -22,6 +23,7 @@ const Settings = ({ navigation }) => {
   const [ballBackgroundColor2, setBallBackgroundColor2] = useState(
     settings.freeBall.backgroundColor2
   );
+  const [ballString, setBallString] = useState(settings.freeBall.string);
 
   // Flower Settings
   const [flowerColor1, setFlowerColor1] = useState(settings.flower.color1);
@@ -38,6 +40,7 @@ const Settings = ({ navigation }) => {
     setBallBallColor2(settings.freeBall.ballColor2);
     setBallBackgroundColor1(settings.freeBall.backgroundColor1);
     setBallBackgroundColor2(settings.freeBall.backgroundColor2);
+    setBallString(settings.freeBall.string);
     setFlowerColor1(settings.flower.color1);
     setFlowerColor2(settings.flower.color2);
     setFlowerAdditionalOptions(settings.flower.additionalOptions);
@@ -51,6 +54,7 @@ const Settings = ({ navigation }) => {
         ballColor2: ballBallColor2,
         backgroundColor1: ballBackgroundColor1,
         backgroundColor2: ballBackgroundColor2,
+        string: ballString,
       },
       flower: {
         color1: flowerColor1,
@@ -150,6 +154,11 @@ const Settings = ({ navigation }) => {
           </View>
         </View>
         <Divider size={1} color="#414141" margin={5} />
+        <View style={styles.option}>
+          <Text style={styles.optionText}>String:</Text>
+          <CheckBox value={ballString} onChange={(e) => setBallString(e)} />
+        </View>
+        <Divider size={1} color="#414141" margin={5} />
         <View style={styles.screenHeading}>
           <Text style={styles.screenHeadingText}>Flower</Text>
         </View>
@@ -192,7 +201,10 @@ const Settings = ({ navigation }) => {
         <Divider size={1} color="#414141" margin={5} />
         <View style={styles.option}>
           <Text style={styles.optionText}>Addition options:</Text>
-          <Text>CheckBox TODO</Text>
+          <CheckBox
+            value={flowerAdditionalOptions}
+            onChange={(e) => setFlowerAdditionalOptions(e)}
+          />
         </View>
         <Divider size={1} color="#414141" margin={5} />
         <View style={styles.screenHeading}>
