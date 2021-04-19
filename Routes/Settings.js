@@ -6,6 +6,7 @@ import Divider from "../Components/Helpers/Divider";
 import { LoaderContext } from "../Loader";
 import ColorSelector from "../Components/Helpers/ColorSelector";
 import CheckBox from "../Components/Helpers/CheckBox";
+import ThemeToggler from "../Components/Helpers/ThemeToggler";
 
 const Settings = ({ navigation }) => {
   const { settings, setNewSettings, resetSettings } = useContext(LoaderContext);
@@ -35,6 +36,7 @@ const Settings = ({ navigation }) => {
   // other Settings
   const [otherTheme, setOtherTheme] = useState(settings.others.theme);
 
+  // Called each time settings changes
   useEffect(() => {
     setBallBallColor1(settings.freeBall.ballColor1);
     setBallBallColor2(settings.freeBall.ballColor2);
@@ -47,7 +49,9 @@ const Settings = ({ navigation }) => {
     setOtherTheme(settings.others.theme);
   }, [settings]);
 
+  // Svae new settings
   const saveSettings = () => {
+    // WARNING: always compare with defaultSettings in root:Loader.js
     const newSettings = {
       freeBall: {
         ballColor1: ballBallColor1,
@@ -69,7 +73,11 @@ const Settings = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        ...styles.container,
+      }}
+    >
       <Pressable style={styles.saveButton} onPress={saveSettings}>
         <MaterialCommunityIcons name="content-save" size={28} color="white" />
       </Pressable>
@@ -84,9 +92,12 @@ const Settings = ({ navigation }) => {
           </Text>
         </View>
         <Divider size={1.5} color="#212121" margin={5} />
-        <View style={styles.screenHeading}>
+        <Pressable
+          style={styles.screenHeading}
+          onPress={() => navigation.navigate("Home")}
+        >
           <Text style={styles.screenHeadingText}>Free Ball</Text>
-        </View>
+        </Pressable>
         <View style={styles.advice}>
           <Text style={styles.adviceText}>
             Do whatever you want to do with colors. Just make sure to not have
@@ -159,9 +170,12 @@ const Settings = ({ navigation }) => {
           <CheckBox value={ballString} onChange={(e) => setBallString(e)} />
         </View>
         <Divider size={1} color="#414141" margin={5} />
-        <View style={styles.screenHeading}>
+        <Pressable
+          style={styles.screenHeading}
+          onPress={() => navigation.navigate("Flower")}
+        >
           <Text style={styles.screenHeadingText}>Flower</Text>
-        </View>
+        </Pressable>
         <View style={styles.advice}>
           <Text style={styles.adviceText}>
             This is gardient colors, make sure you select close colors for
@@ -215,12 +229,20 @@ const Settings = ({ navigation }) => {
         </View>
         <Divider size={1} color="#313131" margin={5} />
         <View style={styles.option}>
-          <Text style={styles.optionText}>Theme</Text>
-          <TextInput
+          <Text style={styles.optionText}>Theme:</Text>
+          <ThemeToggler
             value={otherTheme}
-            onChangeText={(e) => setOtherTheme(e)}
-            style={styles.inputBox}
-          ></TextInput>
+            onChange={(theme) => setOtherTheme(theme)}
+            duration={500}
+            boxStyle={{
+              width: 50,
+              height: 50,
+              backgroundColor: "#1263f1",
+              marginRight: 10,
+            }}
+            sunColor="yellow"
+            moonColor="white"
+          />
         </View>
         <View style={styles.someSpaceForSaveButton}>
           <Pressable

@@ -18,7 +18,7 @@ const defaultSettings = {
     additionalOptions: true,
   },
   others: {
-    theme: "Light",
+    theme: "light",
   },
 };
 
