@@ -14,6 +14,7 @@ import Test from "./Routes/Test";
 import Settings from "./Routes/Settings";
 import { LoaderProvider, LoaderContext } from "./Loader";
 import LoadingFlower from "./Components/LoadingFlower";
+import LandingPage from "./Routes/LandingPage";
 
 const Drawer = createDrawerNavigator();
 
@@ -96,6 +97,7 @@ const Navigator = () => {
             ),
           }}
         />
+        <Drawer.Screen name="LandingPage" component={LandingPage} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
