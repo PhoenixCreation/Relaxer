@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,6 +13,7 @@ import FlowerSvg from "../Components/Svg/FlowerSvg";
 import CustomizationSvg from "../Components/Svg/CustomizationSvg";
 import { LoaderContext } from "../Loader";
 import PrivacyProtectionSvg from "../Components/Svg/PrivacyProtectionSvg";
+import TouchHere from "../Components/Helpers/TouchHere";
 
 const { width, height } = Dimensions.get("window");
 
@@ -24,6 +25,7 @@ const LandingPage = () => {
   const { removeFirsttime } = useContext(LoaderContext);
   const scroll = useRef();
   const [currentPage, setCurrentPage] = useState(1);
+  const [touchIndicator, setTouchIndicator] = useState(true);
 
   const goToPage = async (index) => {
     if (index < 1 || index > NUMBER_OF_SLIDES + 1) return;
@@ -82,7 +84,7 @@ const LandingPage = () => {
         </Pressable>
         <View style={styles.pager}>
           {new Array(NUMBER_OF_SLIDES).fill(1).map((_, i) => (
-            <View
+            <Pressable
               key={i}
               style={{
                 width: 10,
@@ -94,22 +96,43 @@ const LandingPage = () => {
                 borderColor: "black",
                 marginRight: i === NUMBER_OF_SLIDES - 1 ? 0 : 10,
               }}
-            ></View>
+              onPress={() => goToPage(i + 1)}
+            ></Pressable>
           ))}
         </View>
         <Pressable
-          style={{ ...styles.next }}
+          style={{
+            ...styles.next,
+            borderWidth: currentPage === NUMBER_OF_SLIDES ? 2 : 0,
+            borderColor: "#ffff00",
+          }}
           onPress={() => goToPage(currentPage + 1)}
         >
           <ExpoLinearGradient
             colors={["#007cb0", "#00bfa1"]}
             style={{ ...StyleSheet.absoluteFillObject }}
           />
-          <Text style={styles.nextText}>
+          <Text
+            style={{
+              ...styles.nextText,
+              color: currentPage === NUMBER_OF_SLIDES ? "yellow" : "white",
+              fontWeight: currentPage === NUMBER_OF_SLIDES ? "bold" : "normal",
+            }}
+          >
             {currentPage === NUMBER_OF_SLIDES ? "Explore" : "Next >"}
           </Text>
         </Pressable>
       </View>
+      <TouchHere
+        x={width - 80}
+        y={height - 40}
+        visible={touchIndicator}
+        onRequestClose={() => setTouchIndicator(false)}
+        duration={4000}
+        delay={2000}
+        ringColor="#fff"
+        handColor="#fff"
+      />
     </View>
   );
 };
@@ -150,7 +173,8 @@ const SecondPage = ({ goToPage }) => {
       <FlowerSvg width={width - 10} height={width - 10} />
       <View style={styles.bottom}>
         <Text style={{ ...styles.bottomText, color: "white" }}>
-          Study shows that flower patterns calms our over acting brain.
+          Study shows that flower patterns calms our over acting brain. I have
+          one beautiful one on this app.
         </Text>
       </View>
     </View>
@@ -202,8 +226,17 @@ const FourthPage = ({ goToPage }) => {
       <View style={styles.bottom}>
         <Text style={{ ...styles.bottomText, color: "#444", fontSize: 17 }}>
           Don't worry. I don't colllect any data. Everything stays in local
-          device. For more info visit information section inside app. See you
-          inside.
+          device. For more info visit information section inside app.
+        </Text>
+        <Text
+          style={{
+            ...styles.bottomText,
+            color: "#444",
+            fontSize: 17,
+            marginTop: 0,
+          }}
+        >
+          See you inside.
         </Text>
       </View>
     </View>
