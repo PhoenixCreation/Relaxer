@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,15 +11,26 @@ import { LinearGradient as ExpoLinearGradient } from "expo-linear-gradient";
 import WorkingSvg from "../Components/Svg/WorkingSvg";
 import FlowerSvg from "../Components/Svg/FlowerSvg";
 import CustomizationSvg from "../Components/Svg/CustomizationSvg";
+import { LoaderContext } from "../Loader";
+import PrivacyProtectionSvg from "../Components/Svg/PrivacyProtectionSvg";
 
 const { width, height } = Dimensions.get("window");
 
+const NUMBER_OF_SLIDES = 4;
+
+const colorPalate = ["#0000ff", "#004400", "#ff4444", "#ffb612"];
+
 const LandingPage = () => {
+  const { removeFirsttime } = useContext(LoaderContext);
   const scroll = useRef();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const goToPage = (index) => {
-    if (index < 1 || index > 4) return;
+  const goToPage = async (index) => {
+    if (index < 1 || index > NUMBER_OF_SLIDES + 1) return;
+    if (index === NUMBER_OF_SLIDES + 1) {
+      await removeFirsttime();
+      return;
+    }
     setCurrentPage(index);
     scroll.current?.scrollTo({ x: (index - 1) * width });
   };
@@ -38,6 +49,16 @@ const LandingPage = () => {
         <ThirdPage goToPage={goToPage} />
         <FourthPage goToPage={goToPage} />
       </ScrollView>
+      <Pressable
+        style={{
+          position: "absolute",
+          right: 0,
+          margin: 5,
+        }}
+        onPress={() => goToPage(NUMBER_OF_SLIDES + 1)}
+      >
+        <Text style={{ color: "grey" }}>{"skip >>"}</Text>
+      </Pressable>
       <View
         style={{
           marginTop: -50,
@@ -60,17 +81,18 @@ const LandingPage = () => {
           <Text style={styles.previousText}>{"< Previous"}</Text>
         </Pressable>
         <View style={styles.pager}>
-          {new Array(4).fill(1).map((_, i) => (
+          {new Array(NUMBER_OF_SLIDES).fill(1).map((_, i) => (
             <View
               key={i}
               style={{
                 width: 10,
                 height: 10,
                 borderRadius: 10,
-                backgroundColor: i === currentPage - 1 ? "blue" : "transparent",
+                backgroundColor:
+                  i === currentPage - 1 ? colorPalate[i] : "transparent",
                 borderWidth: 1,
                 borderColor: "black",
-                marginRight: i === 3 ? 0 : 10,
+                marginRight: i === NUMBER_OF_SLIDES - 1 ? 0 : 10,
               }}
             ></View>
           ))}
@@ -84,7 +106,7 @@ const LandingPage = () => {
             style={{ ...StyleSheet.absoluteFillObject }}
           />
           <Text style={styles.nextText}>
-            {currentPage === 4 ? "Finish" : "Next >"}
+            {currentPage === NUMBER_OF_SLIDES ? "Explore" : "Next >"}
           </Text>
         </Pressable>
       </View>
@@ -173,18 +195,15 @@ const FourthPage = ({ goToPage }) => {
       />
       <View style={{ ...styles.heading }}>
         <Text style={{ ...styles.headingText, color: "#f62", fontSize: 23 }}>
-          You find Pendulam to be pleasing?
+          Concerned about your privacy?
         </Text>
       </View>
-
-      {
-        // TODO:// This is all you got, This page desides user stays or leavs
-      }
-
+      <PrivacyProtectionSvg width={width - 10} height={width - 10} />
       <View style={styles.bottom}>
-        <Text style={{ ...styles.bottomText, color: "#333" }}>
-          Relax yourself by playing with spring'ed ball and feel your inner
-          little child.
+        <Text style={{ ...styles.bottomText, color: "#444", fontSize: 17 }}>
+          Don't worry. I don't colllect any data. Everything stays in local
+          device. For more info visit information section inside app. See you
+          inside.
         </Text>
       </View>
     </View>

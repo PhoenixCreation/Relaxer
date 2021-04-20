@@ -23,10 +23,12 @@ const defaultSettings = {
 };
 
 const KEY = "@Relaxer_settings";
+const FIRST_TIME_KEY = "@Relaxer_firsttime";
 
 export const LoaderProvider = (props) => {
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState(null);
+  const [firsttime, setFirsttime] = useState(false);
 
   useEffect(() => {
     getSettings().then((settings) => {
@@ -39,12 +41,15 @@ export const LoaderProvider = (props) => {
 
   const getSettings = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem(KEY);
-      if (!jsonValue) {
+      const jsonValue = await AsyncStorage.multiGet([KEY, FIRST_TIME_KEY]);
+      if (!jsonValue[1][1]) {
+        setFirsttime(true);
+      }
+      if (!jsonValue[0][1]) {
         await AsyncStorage.setItem(KEY, JSON.stringify(defaultSettings));
         return defaultSettings;
       }
-      return JSON.parse(jsonValue);
+      return JSON.parse(jsonValue[0][1]);
     } catch (error) {
       console.log("Settings Context Loading => " + error);
       return defaultSettings;
@@ -65,9 +70,22 @@ export const LoaderProvider = (props) => {
     setNewSettings(defaultSettings);
   };
 
+  const removeFirsttime = async () => {
+    await AsyncStorage.setItem(FIRST_TIME_KEY, "true");
+    setFirsttime(false);
+    return true;
+  };
+
   return (
     <LoaderContext.Provider
-      value={{ loading, settings, setNewSettings, resetSettings }}
+      value={{
+        loading,
+        settings,
+        setNewSettings,
+        resetSettings,
+        firsttime,
+        removeFirsttime,
+      }}
     >
       {props.children}
     </LoaderContext.Provider>

@@ -28,9 +28,11 @@ const app = () => {
 };
 
 const Navigator = () => {
-  const { loading } = useContext(LoaderContext);
+  const { loading, firsttime } = useContext(LoaderContext);
 
   if (loading) return <LoadingFlower />;
+
+  if (firsttime) return <LandingPage />;
 
   return (
     <NavigationContainer>
