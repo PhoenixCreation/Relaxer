@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-// import { Divider, ColorSelector } from "phoenix-rn-helper";
+// import { Divider, TouchHere } from "phoenix-rn-helper";
 
 const Test = () => {
   const [check, setCheck] = React.useState(true);
