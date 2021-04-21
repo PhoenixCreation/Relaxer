@@ -15,6 +15,7 @@ import Settings from "./Routes/Settings";
 import { LoaderProvider, LoaderContext } from "./Loader";
 import LoadingFlower from "./Components/LoadingFlower";
 import LandingPage from "./Routes/LandingPage";
+import Inforrmation from "./Routes/Inforrmation";
 
 const Drawer = createDrawerNavigator();
 
@@ -87,6 +88,19 @@ const Navigator = () => {
           }}
         />
         <Drawer.Screen
+          name="LandingPage"
+          component={LandingPage}
+          options={{
+            drawerIcon: ({ focused, size }) => (
+              <MaterialCommunityIcons
+                name="airplane-landing"
+                size={size}
+                color="#66f"
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
           name="Settings"
           component={Settings}
           options={{
@@ -94,12 +108,25 @@ const Navigator = () => {
               <Feather
                 name="settings"
                 size={size}
-                color={focused ? "black" : "grey"}
+                color={focused ? "grey" : "black"}
               />
             ),
           }}
         />
-        <Drawer.Screen name="LandingPage" component={LandingPage} />
+        <Drawer.Screen
+          name="Information"
+          component={Inforrmation}
+          options={{
+            title: "Support",
+            drawerIcon: ({ focused, size }) => (
+              <MaterialCommunityIcons
+                name={focused ? "information-outline" : "information"}
+                size={size}
+                color="black"
+              />
+            ),
+          }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );
