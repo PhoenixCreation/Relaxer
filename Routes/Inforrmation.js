@@ -65,12 +65,11 @@ const Inforrmation = () => {
         },
       }
     );
-    ToastAndroid.show("Thank you for feedback", ToastAndroid.LONG);
+    ToastAndroid.show("Thank you for reaching out", ToastAndroid.LONG);
   };
 
   return (
     <ScrollView style={styles.container}>
-      <StatusBar hidden={false} style="light" backgroundColor="#111" />
       <View style={styles.headingCont}>
         <View style={styles.logoCont}>
           <LinearGradient
