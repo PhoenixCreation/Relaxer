@@ -25,6 +25,12 @@ const Settings = ({ navigation }) => {
     settings.freeBall.backgroundColor2
   );
   const [ballString, setBallString] = useState(settings.freeBall.string);
+  const [ballSpringConstant, setBallSpringConstant] = useState(
+    settings.freeBall.springConstant
+  );
+  const [ballScaleFactor, setBallScaleFactor] = useState(
+    settings.freeBall.scaleFactor
+  );
 
   // Flower Settings
   const [flowerColor1, setFlowerColor1] = useState(settings.flower.color1);
@@ -42,6 +48,8 @@ const Settings = ({ navigation }) => {
     setBallBallColor2(settings.freeBall.ballColor2);
     setBallBackgroundColor1(settings.freeBall.backgroundColor1);
     setBallBackgroundColor2(settings.freeBall.backgroundColor2);
+    setBallSpringConstant(settings.freeBall.springConstant);
+    setBallScaleFactor(settings.freeBall.scaleFactor);
     setBallString(settings.freeBall.string);
     setFlowerColor1(settings.flower.color1);
     setFlowerColor2(settings.flower.color2);
@@ -58,6 +66,8 @@ const Settings = ({ navigation }) => {
         ballColor2: ballBallColor2,
         backgroundColor1: ballBackgroundColor1,
         backgroundColor2: ballBackgroundColor2,
+        springConstant: ballSpringConstant,
+        scaleFactor: ballScaleFactor,
         string: ballString,
       },
       flower: {
@@ -160,6 +170,28 @@ const Settings = ({ navigation }) => {
             <TextInput
               value={ballBackgroundColor2}
               onChangeText={(e) => setBallBackgroundColor2(e)}
+              style={styles.inputBox}
+            ></TextInput>
+          </View>
+        </View>
+        <Divider size={1} color="#414141" margin={5} />
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Spring Constant:</Text>
+          <View style={{ flexDirection: "row" }}>
+            <TextInput
+              value={ballSpringConstant.toString()}
+              onChangeText={(e) => setBallSpringConstant(e)}
+              style={styles.inputBox}
+            ></TextInput>
+          </View>
+        </View>
+        <Divider size={1} color="#414141" margin={5} />
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Scale Factor:</Text>
+          <View style={{ flexDirection: "row" }}>
+            <TextInput
+              value={ballScaleFactor.toString()}
+              onChangeText={(e) => setBallScaleFactor(e)}
               style={styles.inputBox}
             ></TextInput>
           </View>

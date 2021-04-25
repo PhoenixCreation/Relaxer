@@ -137,7 +137,7 @@ const LandingPage = () => {
   );
 };
 
-const FirstPage = ({ goToPage }) => {
+export const FirstPage = ({ goToPage }) => {
   return (
     <View style={[styles.landing, { backgroundColor: "lightblue" }]}>
       <ExpoLinearGradient
@@ -157,7 +157,7 @@ const FirstPage = ({ goToPage }) => {
   );
 };
 
-const SecondPage = ({ goToPage }) => {
+export const SecondPage = ({ goToPage }) => {
   return (
     <View style={[styles.landing, { backgroundColor: "lightgreen" }]}>
       <ExpoLinearGradient
@@ -181,7 +181,7 @@ const SecondPage = ({ goToPage }) => {
   );
 };
 
-const ThirdPage = ({ goToPage }) => {
+export const ThirdPage = ({ goToPage }) => {
   return (
     <View style={[styles.landing, { backgroundColor: "#ffc0cb" }]}>
       <ExpoLinearGradient
@@ -209,7 +209,7 @@ const ThirdPage = ({ goToPage }) => {
   );
 };
 
-const FourthPage = ({ goToPage }) => {
+export const FourthPage = ({ goToPage }) => {
   return (
     <View style={[styles.landing, { backgroundColor: "#fa0" }]}>
       <ExpoLinearGradient

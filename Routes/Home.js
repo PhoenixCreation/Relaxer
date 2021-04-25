@@ -20,12 +20,22 @@ const { width, height } = Dimensions.get("window");
 
 const AnimatedLine = Animated.createAnimatedComponent(Line);
 
-const SPRING_CONFIG = {
-  damping: 5,
-};
-
 const Home = () => {
   const { settings } = useContext(LoaderContext);
+
+  const SPRING_CONFIG = {
+    damping: 5,
+  };
+  if (
+    settings.freeBall.springConstant &&
+    !isNaN(settings.freeBall.springConstant)
+  ) {
+    SPRING_CONFIG.damping = settings.freeBall.springConstant;
+  }
+  let SCALE_FACTOR = 1.5;
+  if (settings.freeBall.scaleFactor && !isNaN(settings.freeBall.scaleFactor)) {
+    SCALE_FACTOR = settings.freeBall.scaleFactor;
+  }
 
   const transformColor = (color) => {
     return {
@@ -84,7 +94,13 @@ const Home = () => {
       transform: [
         { translateX: withSpring(touchX.value, SPRING_CONFIG) },
         { translateY: withSpring(touchY.value, SPRING_CONFIG) },
-        { scale: interpolate(scroll.value, [-50, 0, 500], [0.9, 1, 1.6]) },
+        {
+          scale: interpolate(
+            scroll.value,
+            [-50, 0, 500],
+            [0.9, 1, SCALE_FACTOR]
+          ),
+        },
       ],
     };
   });

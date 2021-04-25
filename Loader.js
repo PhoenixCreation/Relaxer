@@ -6,10 +6,12 @@ export const LoaderContext = createContext();
 
 const defaultSettings = {
   freeBall: {
-    ballColor1: "#ff0000",
-    ballColor2: "#ffff00",
-    backgroundColor1: "#ffffff",
-    backgroundColor2: "#000000",
+    ballColor1: "#9800ff",
+    ballColor2: "#003aff",
+    backgroundColor1: "#ff9bea",
+    backgroundColor2: "#ca00ff",
+    springConstant: 5,
+    scaleFactor: 1.6,
     string: true,
   },
   flower: {
