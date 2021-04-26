@@ -201,6 +201,45 @@ const Inforrmation = () => {
             - Website: phoenixcreation.netlify.app
           </Text>
         </View>
+        <View style={styles.developersCont}>
+          <Text style={styles.developers}>UI/UX Designer(s)</Text>
+        </View>
+        <View style={styles.contactDetails}>
+          <Text style={styles.contactHead}>1. HET PATEL (phoenix)</Text>
+          <Text
+            style={styles.contact}
+            onPress={() => goToLink("https://twitter.com/PhoenixCrea2ion")}
+          >
+            - Twitter: @PhoenixCrea2ion
+          </Text>
+          <Text
+            style={styles.contact}
+            onPress={() => goToLink("https://instagram.com/phoenixcreationweb")}
+          >
+            - Instagram: phoenixcreationweb
+          </Text>
+          <Text
+            style={styles.contact}
+            onPress={() => goToLink(NETLIFY_PORTFOLIO)}
+          >
+            - Website: phoenixcreation.netlify.app
+          </Text>
+        </View>
+        <View style={styles.contactDetails}>
+          <Text style={styles.contactHead}>2. GAURAV PATEL</Text>
+          <Text
+            style={styles.contact}
+            onPress={() => goToLink("https://twitter.com/Patelgauravd")}
+          >
+            - Twitter: @Patelgauravd
+          </Text>
+          <Text
+            style={styles.contact}
+            onPress={() => goToLink("https://t.me/yisyyq")}
+          >
+            - Telegram: yisyyq (click to open in app)
+          </Text>
+        </View>
       </View>
     </ScrollView>
   );
