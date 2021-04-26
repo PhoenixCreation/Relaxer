@@ -16,6 +16,7 @@ import { LoaderProvider, LoaderContext } from "./Loader";
 import LoadingFlower from "./Components/LoadingFlower";
 import LandingPage from "./Routes/LandingPage";
 import Inforrmation from "./Routes/Inforrmation";
+import Divider from "./Components/Helpers/Divider";
 
 const Drawer = createDrawerNavigator();
 
@@ -29,7 +30,7 @@ const app = () => {
 };
 
 const Navigator = () => {
-  const { loading, firsttime } = useContext(LoaderContext);
+  const { loading, firsttime, settings } = useContext(LoaderContext);
 
   if (loading) return <LoadingFlower />;
 
@@ -39,7 +40,9 @@ const Navigator = () => {
     <NavigationContainer>
       <Drawer.Navigator
         initialRouteName="Home"
-        drawerContent={drawerComopnent}
+        drawerContent={(props) => (
+          <DrawerComopnentCustom settings={settings} {...props} />
+        )}
         detachInactiveScreens={true}
       >
         <Drawer.Screen
@@ -132,29 +135,54 @@ const Navigator = () => {
   );
 };
 
-const drawerComopnent = (props) => {
+const DrawerComopnentCustom = (props) => {
+  const { settings } = props;
   return (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView
+      style={{
+        backgroundColor:
+          settings.others.theme === "light" ? "white" : "#212121",
+        color: settings.others.theme === "light" ? "black" : "white",
+      }}
+      {...props}
+    >
       <View
         style={{
           width: "100%",
           height: 70,
-          borderBottomWidth: 2,
-          borderRadius: 30,
-          borderColor: "darkgrey",
           padding: 20,
           flexDirection: "row",
           alignItems: "center",
         }}
       >
-        <Entypo name="flower" size={24} color="black" />
+        <Entypo
+          name="flower"
+          size={24}
+          color={settings.others.theme === "light" ? "black" : "white"}
+        />
         <Text
-          style={{ flex: 1, color: "black", fontSize: 27, textAlign: "center" }}
+          style={{
+            flex: 1,
+            color: settings.others.theme === "light" ? "black" : "white",
+            fontSize: 27,
+            textAlign: "center",
+          }}
         >
           Realxer
         </Text>
       </View>
-      <DrawerItemList {...props} />
+      <Divider
+        size={1}
+        color={settings.others.theme === "light" ? "black" : "white"}
+        margin={15}
+      />
+      <DrawerItemList
+        activeTintColor={settings.others.theme === "light" ? "black" : "white"}
+        inactiveTintColor={
+          settings.others.theme === "light" ? "#313131" : "#c1c1c1"
+        }
+        {...props}
+      />
     </DrawerContentScrollView>
   );
 };

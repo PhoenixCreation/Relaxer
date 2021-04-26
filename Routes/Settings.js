@@ -11,6 +11,103 @@ import ThemeToggler from "../Components/Helpers/ThemeToggler";
 const Settings = ({ navigation }) => {
   const { settings, setNewSettings, resetSettings } = useContext(LoaderContext);
 
+  const theme = settings.others.theme === "light";
+
+  const themeColors = {
+    headingTextColor: theme ? "black" : "#eee",
+    adviceTextColor: theme ? "#616161" : "#919191",
+    backgroundColor: theme ? "white" : "#212121",
+    dividerColor: theme ? "#313131" : "#a1a1a1",
+    colorboxBorderColor: theme ? "black" : "white",
+  };
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: themeColors.backgroundColor,
+    },
+    scrollView: {
+      paddingHorizontal: 5,
+    },
+    heading: {
+      padding: 5,
+      marginBottom: 5,
+    },
+    headingText: {
+      fontSize: 24,
+      fontWeight: "bold",
+      textAlign: "center",
+      color: themeColors.headingTextColor,
+    },
+    screenHeading: {
+      marginTop: 15,
+      paddingHorizontal: 5,
+      paddingVertical: 2,
+    },
+    screenHeadingText: {
+      fontSize: 21,
+      fontWeight: "bold",
+      color: themeColors.headingTextColor,
+    },
+    option: {
+      padding: 5,
+    },
+    optionSettings: {
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    optionText: {
+      fontSize: 16,
+      color: themeColors.headingTextColor,
+    },
+    inputBox: {
+      width: 100,
+      borderWidth: 1,
+      borderColor: themeColors.headingTextColor,
+      paddingHorizontal: 10,
+      borderRadius: 10,
+      color: themeColors.headingTextColor,
+    },
+    advice: {
+      padding: 5,
+      marginTop: -5,
+    },
+    adviceText: {
+      color: themeColors.adviceTextColor,
+    },
+    innerAdvice: {},
+    innerAdviceText: {
+      color: themeColors.adviceTextColor,
+      fontSize: 12.5,
+    },
+    saveButton: {
+      position: "absolute",
+      backgroundColor: "#1263f1",
+      zIndex: 10,
+      bottom: 0,
+      right: 0,
+      margin: 20,
+      padding: 10,
+      borderRadius: 100,
+    },
+    someSpaceForSaveButton: {
+      height: 85,
+      justifyContent: "center",
+    },
+    resetButton: {
+      backgroundColor: "#1263f1",
+      width: 50,
+      padding: 10,
+      marginLeft: 10,
+      borderRadius: 100,
+    },
+    colorbox: {
+      borderColor: themeColors.colorboxBorderColor,
+    },
+  });
+
   // Free ball settings
   const [ballBallColor1, setBallBallColor1] = useState(
     settings.freeBall.ballColor1
@@ -24,13 +121,16 @@ const Settings = ({ navigation }) => {
   const [ballBackgroundColor2, setBallBackgroundColor2] = useState(
     settings.freeBall.backgroundColor2
   );
-  const [ballString, setBallString] = useState(settings.freeBall.string);
   const [ballSpringConstant, setBallSpringConstant] = useState(
     settings.freeBall.springConstant
   );
   const [ballScaleFactor, setBallScaleFactor] = useState(
     settings.freeBall.scaleFactor
   );
+  const [ballVibration, setBallVibration] = useState(
+    settings.freeBall.vibration
+  );
+  const [ballString, setBallString] = useState(settings.freeBall.string);
 
   // Flower Settings
   const [flowerColor1, setFlowerColor1] = useState(settings.flower.color1);
@@ -50,6 +150,7 @@ const Settings = ({ navigation }) => {
     setBallBackgroundColor2(settings.freeBall.backgroundColor2);
     setBallSpringConstant(settings.freeBall.springConstant);
     setBallScaleFactor(settings.freeBall.scaleFactor);
+    setBallVibration(settings.freeBall.vibration);
     setBallString(settings.freeBall.string);
     setFlowerColor1(settings.flower.color1);
     setFlowerColor2(settings.flower.color2);
@@ -68,6 +169,7 @@ const Settings = ({ navigation }) => {
         backgroundColor2: ballBackgroundColor2,
         springConstant: ballSpringConstant,
         scaleFactor: ballScaleFactor,
+        vibration: ballVibration,
         string: ballString,
       },
       flower: {
@@ -101,7 +203,7 @@ const Settings = ({ navigation }) => {
             to hell.
           </Text>
         </View>
-        <Divider size={1.5} color="#212121" margin={5} />
+        <Divider size={1.5} color={theme ? "#212121" : "#d1d1d1"} margin={5} />
         <Pressable
           style={styles.screenHeading}
           onPress={() => navigation.navigate("Home")}
@@ -114,94 +216,160 @@ const Settings = ({ navigation }) => {
             same colors for ball and background.
           </Text>
         </View>
-        <Divider size={1} color="#313131" margin={5} />
+        <Divider size={1} color={theme ? "#313131" : "#c1c1c1"} margin={5} />
         <View style={styles.option}>
-          <Text style={styles.optionText}>Ball color 1:</Text>
-          <View style={{ flexDirection: "row" }}>
-            <ColorSelector
-              value={ballBallColor1}
-              onChange={(color) => setBallBallColor1(color)}
+          <View style={styles.optionSettings}>
+            <Text style={styles.optionText}>Ball color 1:</Text>
+            <View style={{ flexDirection: "row" }}>
+              <ColorSelector
+                value={ballBallColor1}
+                onChange={(color) => setBallBallColor1(color)}
+                style={styles.colorbox}
+              />
+              <TextInput
+                value={ballBallColor1}
+                onChangeText={(e) => setBallBallColor1(e)}
+                style={styles.inputBox}
+              ></TextInput>
+            </View>
+          </View>
+          <View style={styles.innerAdvice}>
+            <Text style={styles.innerAdviceText}>
+              Starting color of the main ball.
+            </Text>
+          </View>
+        </View>
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <View style={styles.option}>
+          <View style={styles.optionSettings}>
+            <Text style={styles.optionText}>Ball color 2:</Text>
+            <View style={{ flexDirection: "row" }}>
+              <ColorSelector
+                value={ballBallColor2}
+                onChange={(color) => setBallBallColor2(color)}
+                style={styles.colorbox}
+              />
+              <TextInput
+                value={ballBallColor2}
+                onChangeText={(e) => setBallBallColor2(e)}
+                style={styles.inputBox}
+              ></TextInput>
+            </View>
+          </View>
+          <View style={styles.innerAdvice}>
+            <Text style={styles.innerAdviceText}>
+              Ending color of the main ball at the end of the scroll.
+            </Text>
+          </View>
+        </View>
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <View style={styles.option}>
+          <View style={styles.optionSettings}>
+            <Text style={styles.optionText}>Background color 1:</Text>
+            <View style={{ flexDirection: "row" }}>
+              <ColorSelector
+                value={ballBackgroundColor1}
+                onChange={(color) => setBallBackgroundColor1(color)}
+                style={styles.colorbox}
+              />
+              <TextInput
+                value={ballBackgroundColor1}
+                onChangeText={(e) => setBallBackgroundColor1(e)}
+                style={styles.inputBox}
+              ></TextInput>
+            </View>
+          </View>
+          <View style={styles.innerAdvice}>
+            <Text style={styles.innerAdviceText}>Initial background color</Text>
+          </View>
+        </View>
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <View style={styles.option}>
+          <View style={styles.optionSettings}>
+            <Text style={styles.optionText}>Background color 2:</Text>
+            <View style={{ flexDirection: "row" }}>
+              <ColorSelector
+                value={ballBackgroundColor2}
+                onChange={(color) => setBallBackgroundColor2(color)}
+                style={styles.colorbox}
+              />
+              <TextInput
+                value={ballBackgroundColor2}
+                onChangeText={(e) => setBallBackgroundColor2(e)}
+                style={styles.inputBox}
+              ></TextInput>
+            </View>
+          </View>
+          <View style={styles.innerAdvice}>
+            <Text style={styles.innerAdviceText}>
+              At the end of the scroll background color.
+            </Text>
+          </View>
+        </View>
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <View style={styles.option}>
+          <View style={styles.optionSettings}>
+            <Text style={styles.optionText}>Spring Constant:</Text>
+            <View style={{ flexDirection: "row" }}>
+              <TextInput
+                value={ballSpringConstant.toString()}
+                onChangeText={(e) => setBallSpringConstant(e)}
+                style={styles.inputBox}
+              ></TextInput>
+            </View>
+          </View>
+          <View style={styles.innerAdvice}>
+            <Text style={styles.innerAdviceText}>
+              {`Spring constatnt of the ball. \nLower value represents more loosen spring.\nIf you just want to have fun then 2 is recomended.`}
+            </Text>
+          </View>
+        </View>
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <View style={styles.option}>
+          <View style={styles.optionSettings}>
+            <Text style={styles.optionText}>Scale Factor:</Text>
+            <View style={{ flexDirection: "row" }}>
+              <TextInput
+                value={ballScaleFactor.toString()}
+                onChangeText={(e) => setBallScaleFactor(e)}
+                style={styles.inputBox}
+              ></TextInput>
+            </View>
+          </View>
+          <View style={styles.innerAdvice}>
+            <Text style={styles.innerAdviceText}>
+              {`How much ball should scale at the end of scroll. \nIf you want to make it smaller then go below 1.\nGoing over 4 is not recomended but you can do whatever you want to do.`}
+            </Text>
+          </View>
+        </View>
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <View style={styles.option}>
+          <View style={styles.optionSettings}>
+            <Text style={styles.optionText}>Vibration:</Text>
+            <CheckBox
+              value={ballVibration}
+              onChange={(e) => setBallVibration(e)}
             />
-            <TextInput
-              value={ballBallColor1}
-              onChangeText={(e) => setBallBallColor1(e)}
-              style={styles.inputBox}
-            ></TextInput>
+          </View>
+          <View style={styles.innerAdvice}>
+            <Text
+              style={styles.innerAdviceText}
+            >{`Vibration at the end of release of ball.\nIf you find it iritating then turn it off.\nBut if you are releasing stress then it is recomended to have it on because vibration increses blood flow in hand.`}</Text>
           </View>
         </View>
-        <Divider size={1} color="#414141" margin={5} />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
         <View style={styles.option}>
-          <Text style={styles.optionText}>Ball color 2:</Text>
-          <View style={{ flexDirection: "row" }}>
-            <ColorSelector
-              value={ballBallColor2}
-              onChange={(color) => setBallBallColor2(color)}
-            />
-            <TextInput
-              value={ballBallColor2}
-              onChangeText={(e) => setBallBallColor2(e)}
-              style={styles.inputBox}
-            ></TextInput>
+          <View style={styles.optionSettings}>
+            <Text style={styles.optionText}>String:</Text>
+            <CheckBox value={ballString} onChange={(e) => setBallString(e)} />
+          </View>
+          <View style={styles.innerAdvice}>
+            <Text
+              style={styles.innerAdviceText}
+            >{`String joining ball from middle point should be shown or not.`}</Text>
           </View>
         </View>
-        <Divider size={1} color="#414141" margin={5} />
-        <View style={styles.option}>
-          <Text style={styles.optionText}>Background color 1:</Text>
-          <View style={{ flexDirection: "row" }}>
-            <ColorSelector
-              value={ballBackgroundColor1}
-              onChange={(color) => setBallBackgroundColor1(color)}
-            />
-            <TextInput
-              value={ballBackgroundColor1}
-              onChangeText={(e) => setBallBackgroundColor1(e)}
-              style={styles.inputBox}
-            ></TextInput>
-          </View>
-        </View>
-        <Divider size={1} color="#414141" margin={5} />
-        <View style={styles.option}>
-          <Text style={styles.optionText}>Background color 2:</Text>
-          <View style={{ flexDirection: "row" }}>
-            <ColorSelector
-              value={ballBackgroundColor2}
-              onChange={(color) => setBallBackgroundColor2(color)}
-            />
-            <TextInput
-              value={ballBackgroundColor2}
-              onChangeText={(e) => setBallBackgroundColor2(e)}
-              style={styles.inputBox}
-            ></TextInput>
-          </View>
-        </View>
-        <Divider size={1} color="#414141" margin={5} />
-        <View style={styles.option}>
-          <Text style={styles.optionText}>Spring Constant:</Text>
-          <View style={{ flexDirection: "row" }}>
-            <TextInput
-              value={ballSpringConstant.toString()}
-              onChangeText={(e) => setBallSpringConstant(e)}
-              style={styles.inputBox}
-            ></TextInput>
-          </View>
-        </View>
-        <Divider size={1} color="#414141" margin={5} />
-        <View style={styles.option}>
-          <Text style={styles.optionText}>Scale Factor:</Text>
-          <View style={{ flexDirection: "row" }}>
-            <TextInput
-              value={ballScaleFactor.toString()}
-              onChangeText={(e) => setBallScaleFactor(e)}
-              style={styles.inputBox}
-            ></TextInput>
-          </View>
-        </View>
-        <Divider size={1} color="#414141" margin={5} />
-        <View style={styles.option}>
-          <Text style={styles.optionText}>String:</Text>
-          <CheckBox value={ballString} onChange={(e) => setBallString(e)} />
-        </View>
-        <Divider size={1} color="#414141" margin={5} />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
         <Pressable
           style={styles.screenHeading}
           onPress={() => navigation.navigate("Flower")}
@@ -214,67 +382,94 @@ const Settings = ({ navigation }) => {
             better expirience. OR you can just have fun.
           </Text>
         </View>
-        <Divider size={1} color="#313131" margin={5} />
+        <Divider size={1} color={theme ? "#313131" : "#c1c1c1"} margin={5} />
         <View style={styles.option}>
-          <Text style={styles.optionText}>Flower color 1:</Text>
-          <View style={{ flexDirection: "row" }}>
-            <ColorSelector
-              value={flowerColor1}
-              onChange={(color) => setFlowerColor1(color)}
-            />
-            <TextInput
-              value={flowerColor1}
-              onChangeText={(e) => setFlowerColor1(e)}
-              style={styles.inputBox}
-            ></TextInput>
+          <View style={styles.optionSettings}>
+            <Text style={styles.optionText}>Flower color 1:</Text>
+            <View style={{ flexDirection: "row" }}>
+              <ColorSelector
+                value={flowerColor1}
+                onChange={(color) => setFlowerColor1(color)}
+                style={styles.colorbox}
+              />
+              <TextInput
+                value={flowerColor1}
+                onChangeText={(e) => setFlowerColor1(e)}
+                style={styles.inputBox}
+              ></TextInput>
+            </View>
+          </View>
+          <View style={styles.innerAdvice}>
+            <Text style={styles.innerAdviceText}>
+              Top gradient color of flower leave.
+            </Text>
           </View>
         </View>
-        <Divider size={1} color="#414141" margin={5} />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
         <View style={styles.option}>
-          <Text style={styles.optionText}>Flower color 2:</Text>
-          <View style={{ flexDirection: "row" }}>
-            <ColorSelector
-              value={flowerColor2}
-              onChange={(color) => setFlowerColor2(color)}
-            />
-            <TextInput
-              value={flowerColor2}
-              onChangeText={(e) => setFlowerColor2(e)}
-              style={styles.inputBox}
-            ></TextInput>
+          <View style={styles.optionSettings}>
+            <Text style={styles.optionText}>Flower color 2:</Text>
+            <View style={{ flexDirection: "row" }}>
+              <ColorSelector
+                value={flowerColor2}
+                onChange={(color) => setFlowerColor2(color)}
+                style={styles.colorbox}
+              />
+              <TextInput
+                value={flowerColor2}
+                onChangeText={(e) => setFlowerColor2(e)}
+                style={styles.inputBox}
+              ></TextInput>
+            </View>
+          </View>
+          <View style={styles.innerAdvice}>
+            <Text style={styles.innerAdviceText}>
+              Bottom gradient color of flower leave.
+            </Text>
           </View>
         </View>
-        <Divider size={1} color="#414141" margin={5} />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
         <View style={styles.option}>
-          <Text style={styles.optionText}>Addition options:</Text>
-          <CheckBox
-            value={flowerAdditionalOptions}
-            onChange={(e) => setFlowerAdditionalOptions(e)}
-          />
+          <View style={styles.optionSettings}>
+            <Text style={styles.optionText}>Addition options:</Text>
+            <CheckBox
+              value={flowerAdditionalOptions}
+              onChange={(e) => setFlowerAdditionalOptions(e)}
+            />
+          </View>
+          <View style={styles.innerAdvice}>
+            <Text style={styles.innerAdviceText}>
+              Reset button to be shown or not.
+            </Text>
+          </View>
         </View>
-        <Divider size={1} color="#414141" margin={5} />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
         <View style={styles.screenHeading}>
-          <Text style={styles.screenHeadingText}>Other</Text>
+          <Text style={styles.screenHeadingText}>General</Text>
         </View>
         <View style={styles.advice}>
-          <Text style={styles.adviceText}>I don't know what to put here.</Text>
+          <Text style={styles.adviceText}>Overall settings of the app.</Text>
         </View>
-        <Divider size={1} color="#313131" margin={5} />
+        <Divider size={1} color={theme ? "#313131" : "#c1c1c1"} margin={5} />
         <View style={styles.option}>
-          <Text style={styles.optionText}>Theme:</Text>
-          <ThemeToggler
-            value={otherTheme}
-            onChange={(theme) => setOtherTheme(theme)}
-            duration={500}
-            boxStyle={{
-              width: 50,
-              height: 50,
-              backgroundColor: "#1263f1",
-              marginRight: 10,
-            }}
-            sunColor="yellow"
-            moonColor="white"
-          />
+          <View style={styles.optionSettings}>
+            <View style={styles.optionSettings}>
+              <Text style={styles.optionText}>Theme:</Text>
+              <ThemeToggler
+                value={otherTheme}
+                onChange={(newtheme) => setOtherTheme(newtheme)}
+                duration={500}
+                boxStyle={{
+                  width: 50,
+                  height: 50,
+                  backgroundColor: "#1263f1",
+                  marginRight: 10,
+                }}
+                sunColor="yellow"
+                moonColor="white"
+              />
+            </View>
+          </View>
         </View>
         <View style={styles.someSpaceForSaveButton}>
           <Pressable
@@ -292,85 +487,3 @@ const Settings = ({ navigation }) => {
 };
 
 export default Settings;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-  scrollView: {
-    paddingHorizontal: 5,
-  },
-  heading: {
-    padding: 5,
-    marginBottom: 5,
-  },
-  headingText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  screenHeading: {
-    marginTop: 15,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-  },
-  screenHeadingText: {
-    fontSize: 21,
-    fontWeight: "bold",
-    color: "black",
-  },
-  option: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 5,
-  },
-  optionText: {
-    fontSize: 16,
-    color: "black",
-  },
-  inputBox: {
-    width: 100,
-    borderWidth: 1,
-    borderColor: "black",
-    paddingHorizontal: 10,
-    borderRadius: 10,
-  },
-  colorBox: {
-    width: 30,
-    height: 30,
-    borderRadius: 10,
-    borderColor: "black",
-    borderWidth: 1,
-    marginRight: 5,
-  },
-  advice: {
-    padding: 5,
-    marginTop: -5,
-  },
-  adviceText: {
-    color: "#616161",
-  },
-  saveButton: {
-    position: "absolute",
-    backgroundColor: "#1263f1",
-    zIndex: 10,
-    bottom: 0,
-    right: 0,
-    margin: 20,
-    padding: 10,
-    borderRadius: 100,
-  },
-  someSpaceForSaveButton: {
-    height: 85,
-    justifyContent: "center",
-  },
-  resetButton: {
-    backgroundColor: "#1263f1",
-    width: 50,
-    padding: 10,
-    marginLeft: 10,
-    borderRadius: 100,
-  },
-});

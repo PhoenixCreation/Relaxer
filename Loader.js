@@ -12,6 +12,7 @@ const defaultSettings = {
     backgroundColor2: "#ca00ff",
     springConstant: 5,
     scaleFactor: 1.6,
+    vibration: true,
     string: true,
   },
   flower: {
@@ -20,7 +21,7 @@ const defaultSettings = {
     additionalOptions: true,
   },
   others: {
-    theme: "light",
+    theme: "dark",
   },
 };
 

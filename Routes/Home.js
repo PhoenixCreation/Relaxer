@@ -15,12 +15,13 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import { LoaderContext } from "../Loader";
 import { w3color } from "../colorCheck";
 import Svg, { Circle, Line } from "react-native-svg";
+import Header from "../Components/Helpers/Header";
 
 const { width, height } = Dimensions.get("window");
 
 const AnimatedLine = Animated.createAnimatedComponent(Line);
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const { settings } = useContext(LoaderContext);
 
   const SPRING_CONFIG = {
@@ -54,6 +55,14 @@ const Home = () => {
   const touchY = useSharedValue(0);
   const scroll = useSharedValue(0);
 
+  const fn = {
+    vibratePhone: () => {
+      if (settings.freeBall.vibration) {
+        Vibration.vibrate();
+      }
+    },
+  };
+
   const gestureHandler = useAnimatedGestureHandler({
     onStart: (_, ctx) => {
       ctx.x = touchX.value;
@@ -66,7 +75,7 @@ const Home = () => {
     onEnd: () => {
       touchX.value = 0;
       touchY.value = 0;
-      runOnJS(Vibration.vibrate)();
+      runOnJS(fn.vibratePhone)();
     },
   });
 
@@ -166,6 +175,7 @@ const Home = () => {
           height: "200%",
         }}
       >
+        <Header navigation={navigation} title="Free Ball" />
         <Text>Scroll Down to change the colors.</Text>
         <Text>Drag the ball and release to play with it</Text>
       </Animated.ScrollView>
