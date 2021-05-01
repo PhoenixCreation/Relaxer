@@ -6,7 +6,7 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
-import Home from "./Routes/Home";
+import FreeBall from "./Routes/FreeBall";
 import Flower from "./Routes/Flower";
 import { Text, View } from "react-native";
 import { Feather, Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -17,6 +17,7 @@ import LoadingFlower from "./Components/LoadingFlower";
 import LandingPage from "./Routes/LandingPage";
 import Inforrmation from "./Routes/Inforrmation";
 import Divider from "./Components/Helpers/Divider";
+import Home from "./Routes/Home";
 
 const Drawer = createDrawerNavigator();
 
@@ -49,6 +50,20 @@ const Navigator = () => {
           name="Home"
           component={Home}
           options={{
+            title: "Home",
+            drawerIcon: ({ focused, size }) => (
+              <MaterialCommunityIcons
+                name="home"
+                size={size}
+                color={focused ? "#9834a4" : "#56de24"}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="FreeBall"
+          component={FreeBall}
+          options={{
             title: "Free Ball",
             drawerIcon: ({ focused, size }) => (
               <View
@@ -75,6 +90,7 @@ const Navigator = () => {
                 color={focused ? "#00BFA1" : "#009CA0"}
               />
             ),
+            unmountOnBlur: true,
           }}
         />
         <Drawer.Screen

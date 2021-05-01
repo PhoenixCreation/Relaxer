@@ -1,220 +1,160 @@
-import React, { useContext } from "react";
-import { StyleSheet, Text, View, Vibration, Dimensions } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
   interpolate,
-  useAnimatedStyle,
-  useAnimatedProps,
-  useSharedValue,
-  useAnimatedScrollHandler,
-  useAnimatedGestureHandler,
-  withSpring,
   runOnJS,
-  Extrapolate,
+  useAnimatedGestureHandler,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withSpring,
+  withTiming,
 } from "react-native-reanimated";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import AnimatedLabel from "../Components/Helpers/AnimatedLabel";
 import { LoaderContext } from "../Loader";
-import { w3color } from "../colorCheck";
-import Svg, { Circle, Line } from "react-native-svg";
-import Header from "../Components/Helpers/Header";
 
 const { width, height } = Dimensions.get("window");
 
-const AnimatedLine = Animated.createAnimatedComponent(Line);
+const MAX = 200;
 
-const Home = ({ navigation }) => {
+const Home = () => {
   const { settings } = useContext(LoaderContext);
 
-  const SPRING_CONFIG = {
-    damping: 5,
-  };
-  if (
-    settings.freeBall.springConstant &&
-    !isNaN(settings.freeBall.springConstant)
-  ) {
-    SPRING_CONFIG.damping = settings.freeBall.springConstant;
-  }
-  let SCALE_FACTOR = 1.5;
-  if (settings.freeBall.scaleFactor && !isNaN(settings.freeBall.scaleFactor)) {
-    SCALE_FACTOR = settings.freeBall.scaleFactor;
-  }
+  const theme = settings.others.theme === "light";
 
-  const transformColor = (color) => {
-    return {
-      r: new w3color(color).red,
-      g: new w3color(color).green,
-      b: new w3color(color).blue,
-    };
+  const themeColors = {
+    color: theme ? "#121212" : "#c1c1c1",
+    backgroundColor: theme ? "#f1f1f1" : "#212121",
   };
 
-  const color1 = transformColor(settings.freeBall.ballColor1);
-  const color2 = transformColor(settings.freeBall.ballColor2);
-  const backColor1 = transformColor(settings.freeBall.backgroundColor1);
-  const backColor2 = transformColor(settings.freeBall.backgroundColor2);
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: themeColors.backgroundColor,
+      justifyContent: "space-between",
+    },
+    header: {
+      width,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+    },
+    headerText: {
+      fontSize: 22,
+      fontWeight: "bold",
+      color: themeColors.color,
+    },
+    incdicatorContainer: {
+      flex: 1,
+      width: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
 
-  const touchX = useSharedValue(0);
-  const touchY = useSharedValue(0);
-  const scroll = useSharedValue(0);
+  const [stressLevel, setStressLevel] = useState(0);
+
+  const posY = useSharedValue(0);
 
   const fn = {
-    vibratePhone: () => {
-      if (settings.freeBall.vibration) {
-        Vibration.vibrate();
-      }
+    setNewLevel: (value) => {
+      setStressLevel(parseInt(Math.abs(value / MAX) * 100));
     },
+  };
+
+  const interpolateColor = (value, inputArray, outputArray) => {
+    "worklet";
+    const r = interpolate(
+      value,
+      inputArray,
+      outputArray.map((col) => col.r)
+    );
+    const g = interpolate(
+      value,
+      inputArray,
+      outputArray.map((col) => col.g)
+    );
+    const b = interpolate(
+      value,
+      inputArray,
+      outputArray.map((col) => col.b)
+    );
+    const a = interpolate(
+      value,
+      inputArray,
+      outputArray.map((col) => col.a)
+    );
+    return `rgba(${r},${g},${b},${a})`;
   };
 
   const gestureHandler = useAnimatedGestureHandler({
     onStart: (_, ctx) => {
-      ctx.x = touchX.value;
-      ctx.y = touchY.value;
+      ctx.y = posY.value;
     },
-    onActive: (event, ctx) => {
-      touchX.value = ctx.x + event.translationX;
-      touchY.value = ctx.y + event.translationY;
+    onActive: ({ translationY }, ctx) => {
+      if (ctx.y + translationY > 0) {
+        posY.value = 0;
+      } else if (ctx.y + translationY < -MAX) {
+        posY.value = -MAX;
+      } else {
+        posY.value = ctx.y + translationY;
+      }
     },
     onEnd: () => {
-      touchX.value = 0;
-      touchY.value = 0;
-      runOnJS(fn.vibratePhone)();
+      runOnJS(fn.setNewLevel)(posY.value);
     },
   });
 
-  const ballStyle = useAnimatedStyle(() => {
-    const r = interpolate(
-      scroll.value,
-      [-50, 0, 500],
-      [12, color1.r, color2.r]
-    );
-    const g = interpolate(
-      scroll.value,
-      [-50, 0, 500],
-      [12, color1.g, color2.g]
-    );
-    const b = interpolate(
-      scroll.value,
-      [-50, 0, 500],
-      [12, color1.b, color2.b]
-    );
-    return {
-      width: 80,
-      height: 80,
-      borderRadius: 100,
-      backgroundColor: `rgb(${r},${g},${b})`,
-      transform: [
-        { translateX: withSpring(touchX.value, SPRING_CONFIG) },
-        { translateY: withSpring(touchY.value, SPRING_CONFIG) },
-        {
-          scale: interpolate(
-            scroll.value,
-            [-50, 0, 500],
-            [0.9, 1, SCALE_FACTOR]
-          ),
-        },
-      ],
-    };
+  const level = useDerivedValue(() => {
+    const per = parseInt(
+      interpolate(posY.value, [0, -MAX], [0, 100])
+    ).toString();
+    return per + "%";
   });
 
-  const scrollHandler = useAnimatedScrollHandler((event) => {
-    scroll.value = event.contentOffset.y;
-  });
-
-  const scrollStyle = useAnimatedStyle(() => {
-    const r = interpolate(
-      scroll.value,
-      [-50, 0, 500],
-      [12, backColor1.r, backColor2.r]
-    );
-    const g = interpolate(
-      scroll.value,
-      [-50, 0, 500],
-      [12, backColor1.g, backColor2.g]
-    );
-    const b = interpolate(
-      scroll.value,
-      [-50, 0, 500],
-      [12, backColor1.b, backColor2.b]
-    );
+  const containerStyle = useAnimatedStyle(() => {
     return {
-      backgroundColor: `rgb(${r},${g},${b})`,
-    };
-  });
-
-  const LineProps = useAnimatedProps(() => {
-    const r = interpolate(
-      scroll.value,
-      [-50, 0, 500],
-      [12, backColor2.r, backColor1.r],
-      Extrapolate.CLAMP
-    );
-    const g = interpolate(
-      scroll.value,
-      [-50, 0, 500],
-      [12, backColor2.g, backColor1.g],
-      Extrapolate.CLAMP
-    );
-    const b = interpolate(
-      scroll.value,
-      [-50, 0, 500],
-      [12, backColor2.b, backColor1.b],
-      Extrapolate.CLAMP
-    );
-    return {
-      x2: withSpring(touchX.value + width / 2, SPRING_CONFIG),
-      y2: withSpring(touchY.value + height / 2, SPRING_CONFIG),
-      stroke: `rgb(${r},${g},${b})`,
+      width: "100%",
+      height: interpolate(posY.value, [0, -MAX], [0, 100]) + "%",
+      backgroundColor: interpolateColor(
+        posY.value,
+        [-MAX, -MAX / 2, 0],
+        [
+          { r: 255, g: 0, b: 0, a: 1 },
+          { r: 255, g: 255, b: 0, a: 1 },
+          { r: 0, g: 255, b: 0, a: 1 },
+        ]
+      ),
     };
   });
 
   return (
     <View style={styles.container}>
-      <Animated.ScrollView
-        onScroll={scrollHandler}
-        scrollEventThrottle={16}
-        style={[{ height: "100%", width: "100%" }, scrollStyle]}
-        contentContainerStyle={{
-          height: "200%",
-        }}
-      >
-        <Header navigation={navigation} title="Free Ball" />
-        <Text>Scroll Down to change the colors.</Text>
-        <Text>Drag the ball and release to play with it</Text>
-      </Animated.ScrollView>
-      <View style={{ position: "absolute", zIndex: 1 }}>
-        {settings.freeBall.string && (
-          <Svg
-            width={width}
-            height={height}
-            viewBox={`0 0 ${width} ${height}`}
+      <View style={styles.header}>
+        <Text style={styles.headerText}>How much stressed are you?</Text>
+      </View>
+      <View style={styles.incdicatorContainer}>
+        <AnimatedLabel text={level} />
+        <PanGestureHandler onGestureEvent={gestureHandler}>
+          <Animated.View
             style={{
-              position: "absolute",
-              top: -height / 2 + 40,
-              left: -width / 2 + 40,
+              width: 60,
+              height: MAX,
+              borderColor: "black",
+              borderWidth: 2,
+              justifyContent: "flex-end",
             }}
           >
-            <AnimatedLine
-              x1={width / 2}
-              y1={height / 2}
-              strokeWidth={2}
-              animatedProps={LineProps}
-            />
-            <Circle r={10} cx={width / 2} cy={height / 2} fill="blue" />
-          </Svg>
-        )}
-        <PanGestureHandler onGestureEvent={gestureHandler}>
-          <Animated.View style={ballStyle}></Animated.View>
+            <Animated.View style={containerStyle}></Animated.View>
+          </Animated.View>
         </PanGestureHandler>
+      </View>
+      <View style={styles.reconCont}>
+        <Text>{stressLevel}</Text>
       </View>
     </View>
   );
 };
 
 export default Home;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

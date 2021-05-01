@@ -206,7 +206,7 @@ const Settings = ({ navigation }) => {
         <Divider size={1.5} color={theme ? "#212121" : "#d1d1d1"} margin={5} />
         <Pressable
           style={styles.screenHeading}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("FreeBall")}
         >
           <Text style={styles.screenHeadingText}>Free Ball</Text>
         </Pressable>
