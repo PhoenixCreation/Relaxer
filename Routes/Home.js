@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, Dimensions } from "react-native";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import { PanGestureHandler, ScrollView } from "react-native-gesture-handler";
 import Animated, {
   interpolate,
   runOnJS,
@@ -10,10 +10,41 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import AnimatedLabel from "../Components/Helpers/AnimatedLabel";
+import BarChart from "../Components/Helpers/BarChart";
 import { LoaderContext } from "../Loader";
 
 const { width, height } = Dimensions.get("window");
 
+const DATA = [
+  {
+    day: "Sun",
+    value: 10,
+  },
+  {
+    day: "Mon",
+    value: 5,
+  },
+  {
+    day: "Tue",
+    value: 50,
+  },
+  {
+    day: "Wed",
+    value: 90,
+  },
+  {
+    day: "Thu",
+    value: 100,
+  },
+  {
+    day: "Fri",
+    value: 40,
+  },
+  {
+    day: "Sat",
+    value: 70,
+  },
+];
 const MAX = 200;
 
 const Home = () => {
@@ -30,7 +61,6 @@ const Home = () => {
     container: {
       flex: 1,
       backgroundColor: themeColors.backgroundColor,
-      justifyContent: "space-between",
     },
     header: {
       width,
@@ -44,7 +74,6 @@ const Home = () => {
       color: themeColors.color,
     },
     incdicatorContainer: {
-      flex: 1,
       width: "100%",
       alignItems: "center",
       justifyContent: "center",
@@ -57,8 +86,15 @@ const Home = () => {
       top: MAX / 2 - 20,
       transform: [{ rotate: "-90deg" }],
     },
+    chartCont: {
+      marginTop: 20,
+      marginHorizontal: 5,
+      borderRadius: 10,
+      overflow: "hidden",
+    },
   });
 
+  const [data, setData] = useState(DATA);
   const [stressLevel, setStressLevel] = useState(0);
 
   const posY = useSharedValue(0);
@@ -99,12 +135,12 @@ const Home = () => {
       ctx.y = posY.value;
     },
     onActive: ({ translationY }, ctx) => {
-      if (ctx.y + translationY > 0) {
+      if (ctx.y + translationY / 2 > 0) {
         posY.value = 0;
-      } else if (ctx.y + translationY < -MAX) {
+      } else if (ctx.y + translationY / 2 < -MAX) {
         posY.value = -MAX;
       } else {
-        posY.value = ctx.y + translationY;
+        posY.value = ctx.y + translationY / 2;
       }
     },
     onEnd: () => {
@@ -136,12 +172,9 @@ const Home = () => {
   });
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        {/* <Text style={styles.headerText}>How much stressed are you?</Text> */}
-        <Text style={styles.headerText}>
-          Putted on halt for other request...
-        </Text>
+        <Text style={styles.headerText}>How much stressed are you?</Text>
       </View>
       <View style={styles.incdicatorContainer}>
         <AnimatedLabel text={level} />
@@ -162,10 +195,10 @@ const Home = () => {
           </Animated.View>
         </PanGestureHandler>
       </View>
-      <View style={styles.reconCont}>
-        <Text>{stressLevel}</Text>
+      <View style={styles.chartCont}>
+        <BarChart data={data} height={200} />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
