@@ -14,6 +14,7 @@ import CustomizationSvg from "../Components/Svg/CustomizationSvg";
 import { LoaderContext } from "../Loader";
 import PrivacyProtectionSvg from "../Components/Svg/PrivacyProtectionSvg";
 import TouchHere from "../Components/Helpers/TouchHere";
+import { color } from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("window");
 
@@ -22,7 +23,7 @@ const NUMBER_OF_SLIDES = 4;
 const colorPalate = ["#0000ff", "#004400", "#ff4444", "#ffb612"];
 
 const LandingPage = () => {
-  const { removeFirsttime } = useContext(LoaderContext);
+  const { removeFirsttime, settings } = useContext(LoaderContext);
   const scroll = useRef();
   const [currentPage, setCurrentPage] = useState(1);
   const [touchIndicator, setTouchIndicator] = useState(true);
@@ -36,6 +37,78 @@ const LandingPage = () => {
     setCurrentPage(index);
     scroll.current?.scrollTo({ x: (index - 1) * width });
   };
+
+  const colors = {
+    first: {
+      top: settings?.landing?.first.top
+        ? settings?.landing?.first.top
+        : "#add8e6",
+      bottom: settings?.landing?.first.bottom
+        ? settings?.landing?.first.bottom
+        : "#6666ff",
+      textColor: settings?.landing?.first.textColor
+        ? settings?.landing?.first.textColor
+        : "#4c43ff",
+      bottomTextColor: settings?.landing?.first.bottomTextColor
+        ? settings?.landing?.first.bottomTextColor
+        : "#000000",
+      indicatorColor: settings?.landing?.first.indicatorColor
+        ? settings?.landing?.first.indicatorColor
+        : "#0000ff",
+    },
+    second: {
+      top: settings?.landing?.second.top
+        ? settings?.landing?.second.top
+        : "#90ee90",
+      bottom: settings?.landing?.second.bottom
+        ? settings?.landing?.second.bottom
+        : "#008800",
+      textColor: settings?.landing?.second.textColor
+        ? settings?.landing?.second.textColor
+        : "#009900",
+      bottomTextColor: settings?.landing?.second.bottomTextColor
+        ? settings?.landing?.second.bottomTextColor
+        : "#ffffff",
+      indicatorColor: settings?.landing?.second.indicatorColor
+        ? settings?.landing?.second.indicatorColor
+        : "#004400",
+    },
+    third: {
+      top: settings?.landing?.third.top
+        ? settings?.landing?.third.top
+        : "#ffc0cb",
+      bottom: settings?.landing?.third.bottom
+        ? settings?.landing?.third.bottom
+        : "#ff908b",
+      textColor: settings?.landing?.third.textColor
+        ? settings?.landing?.third.textColor
+        : "#ff4444",
+      bottomTextColor: settings?.landing?.third.bottomTextColor
+        ? settings?.landing?.third.bottomTextColor
+        : "#333333",
+      indicatorColor: settings?.landing?.third.indicatorColor
+        ? settings?.landing?.third.indicatorColor
+        : "#ff4444",
+    },
+    fourth: {
+      top: settings?.landing?.fourth.top
+        ? settings?.landing?.fourth.top
+        : "#ffc200",
+      bottom: settings?.landing?.fourth.bottom
+        ? settings?.landing?.fourth.bottom
+        : "#ff8233",
+      textColor: settings?.landing?.fourth.textColor
+        ? settings?.landing?.fourth.textColor
+        : "#ff6622",
+      bottomTextColor: settings?.landing?.fourth.bottomTextColor
+        ? settings?.landing?.fourth.bottomTextColor
+        : "#444444",
+      indicatorColor: settings?.landing?.fourth.indicatorColor
+        ? settings?.landing?.fourth.indicatorColor
+        : "#ffb612",
+    },
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -46,10 +119,10 @@ const LandingPage = () => {
         scrollEventThrottle={16}
         scrollEnabled={false}
       >
-        <FirstPage goToPage={goToPage} />
-        <SecondPage goToPage={goToPage} />
-        <ThirdPage goToPage={goToPage} />
-        <FourthPage goToPage={goToPage} />
+        <FirstPage colors={colors} />
+        <SecondPage colors={colors} />
+        <ThirdPage colors={colors} />
+        <FourthPage colors={colors} />
       </ScrollView>
       <Pressable
         style={{
@@ -137,19 +210,27 @@ const LandingPage = () => {
   );
 };
 
-export const FirstPage = ({ goToPage }) => {
+export const FirstPage = ({ colors }) => {
   return (
     <View style={[styles.landing, { backgroundColor: "lightblue" }]}>
       <ExpoLinearGradient
-        colors={["lightblue", "#66f"]}
+        colors={[colors.first.top, colors.first.bottom]}
         style={{ ...StyleSheet.absoluteFillObject }}
       />
       <View style={styles.heading}>
-        <Text style={styles.headingText}>Tired of working too much?</Text>
+        <Text style={{ ...styles.headingText, color: colors.first.textColor }}>
+          Tired of working too much?
+        </Text>
       </View>
-      <WorkingSvg width={width - 10} height={width - 10} />
+      <WorkingSvg
+        width={width - 10}
+        height={width - 10}
+        color={colors.first.bottom}
+      />
       <View style={styles.bottom}>
-        <Text style={styles.bottomText}>
+        <Text
+          style={{ ...styles.bottomText, color: colors.first.bottomTextColor }}
+        >
           Try some relaxing animations and calm yourself down.
         </Text>
       </View>
@@ -157,22 +238,29 @@ export const FirstPage = ({ goToPage }) => {
   );
 };
 
-export const SecondPage = ({ goToPage }) => {
+export const SecondPage = ({ colors }) => {
   return (
     <View style={[styles.landing, { backgroundColor: "lightgreen" }]}>
       <ExpoLinearGradient
-        colors={["lightgreen", "#080"]}
-        locations={[0.3, 1]}
+        colors={[colors.second.top, colors.second.bottom]}
         style={{ ...StyleSheet.absoluteFillObject }}
       />
       <View style={{ ...styles.heading, marginBottom: 20 }}>
-        <Text style={{ ...styles.headingText, color: "#090", fontSize: 23 }}>
+        <Text
+          style={{
+            ...styles.headingText,
+            color: colors.second.textColor,
+            fontSize: 23,
+          }}
+        >
           Who doesn't like watching beutiful flowers?
         </Text>
       </View>
       <FlowerSvg width={width - 10} height={width - 10} />
       <View style={styles.bottom}>
-        <Text style={{ ...styles.bottomText, color: "white" }}>
+        <Text
+          style={{ ...styles.bottomText, color: colors.second.bottomTextColor }}
+        >
           Study shows that flower patterns calms our over acting brain. I have
           one beautiful one on this app.
         </Text>
@@ -181,22 +269,36 @@ export const SecondPage = ({ goToPage }) => {
   );
 };
 
-export const ThirdPage = ({ goToPage }) => {
+export const ThirdPage = ({ colors }) => {
   return (
     <View style={[styles.landing, { backgroundColor: "#ffc0cb" }]}>
       <ExpoLinearGradient
-        colors={["#ffc0cb", "#ff908b"]}
+        colors={[colors.third.top, colors.third.bottom]}
         style={{ ...StyleSheet.absoluteFillObject }}
       />
       <View style={{ ...styles.heading }}>
-        <Text style={{ ...styles.headingText, color: "#f44", fontSize: 23 }}>
+        <Text
+          style={{
+            ...styles.headingText,
+            color: colors.third.textColor,
+            fontSize: 23,
+          }}
+        >
           Doesn't like my color taste in app?
         </Text>
       </View>
-      <CustomizationSvg width={width - 10} height={width - 10} />
+      <CustomizationSvg
+        width={width - 10}
+        height={width - 10}
+        color={colors.third.bottom}
+      />
       <View style={styles.bottom}>
         <Text
-          style={{ ...styles.bottomText, color: "#333", textAlign: "justify" }}
+          style={{
+            ...styles.bottomText,
+            color: colors.third.bottomTextColor,
+            textAlign: "justify",
+          }}
         >
           Use your creativity and create great color combination to enjoy
           absolutly stunning animations.
@@ -209,29 +311,44 @@ export const ThirdPage = ({ goToPage }) => {
   );
 };
 
-export const FourthPage = ({ goToPage }) => {
+export const FourthPage = ({ colors }) => {
   return (
     <View style={[styles.landing, { backgroundColor: "#fa0" }]}>
       <ExpoLinearGradient
-        colors={["#ffc200", "#ff8233"]}
-        locations={[0.3, 1]}
+        colors={[colors.fourth.top, colors.fourth.bottom]}
         style={{ ...StyleSheet.absoluteFillObject }}
       />
       <View style={{ ...styles.heading }}>
-        <Text style={{ ...styles.headingText, color: "#f62", fontSize: 23 }}>
+        <Text
+          style={{
+            ...styles.headingText,
+            color: colors.fourth.textColor,
+            fontSize: 23,
+          }}
+        >
           Concerned about your privacy?
         </Text>
       </View>
-      <PrivacyProtectionSvg width={width - 10} height={width - 10} />
+      <PrivacyProtectionSvg
+        width={width - 10}
+        height={width - 10}
+        color={colors.fourth.bottom}
+      />
       <View style={styles.bottom}>
-        <Text style={{ ...styles.bottomText, color: "#444", fontSize: 17 }}>
+        <Text
+          style={{
+            ...styles.bottomText,
+            color: colors.fourth.bottomTextColor,
+            fontSize: 17,
+          }}
+        >
           Don't worry. I don't colllect any data. Everything stays in local
           device. For more info visit information section inside app.
         </Text>
         <Text
           style={{
             ...styles.bottomText,
-            color: "#444",
+            color: colors.fourth.bottomTextColor,
             fontSize: 17,
             marginTop: 0,
           }}

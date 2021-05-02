@@ -8,8 +8,6 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
-  withSpring,
-  withTiming,
 } from "react-native-reanimated";
 import AnimatedLabel from "../Components/Helpers/AnimatedLabel";
 import { LoaderContext } from "../Loader";
@@ -50,6 +48,14 @@ const Home = () => {
       width: "100%",
       alignItems: "center",
       justifyContent: "center",
+    },
+    slideAdvice: {
+      color: themeColors.color,
+      position: "absolute",
+      width: MAX,
+      left: -MAX / 2 - 20,
+      top: MAX / 2 - 20,
+      transform: [{ rotate: "-90deg" }],
     },
   });
 
@@ -116,7 +122,7 @@ const Home = () => {
   const containerStyle = useAnimatedStyle(() => {
     return {
       width: "100%",
-      height: interpolate(posY.value, [0, -MAX], [0, 100]) + "%",
+      height: interpolate(posY.value, [0, -MAX], [1, 100]) + "%",
       backgroundColor: interpolateColor(
         posY.value,
         [-MAX, -MAX / 2, 0],
@@ -132,7 +138,10 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>How much stressed are you?</Text>
+        {/* <Text style={styles.headerText}>How much stressed are you?</Text> */}
+        <Text style={styles.headerText}>
+          Putted on halt for other request...
+        </Text>
       </View>
       <View style={styles.incdicatorContainer}>
         <AnimatedLabel text={level} />
@@ -146,6 +155,9 @@ const Home = () => {
               justifyContent: "flex-end",
             }}
           >
+            <Text style={styles.slideAdvice} numberOfLines={1}>
+              Slide on bar to change levels
+            </Text>
             <Animated.View style={containerStyle}></Animated.View>
           </Animated.View>
         </PanGestureHandler>

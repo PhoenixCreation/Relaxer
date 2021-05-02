@@ -139,6 +139,83 @@ const Settings = ({ navigation }) => {
     settings.flower.additionalOptions
   );
 
+  // TEMP
+  // landing settings
+
+  // First page
+  const [landingFirstTop, setLandingFirstTop] = useState(
+    settings.landing.first.top
+  );
+  const [landingFirstBottom, setLandingFirstBottom] = useState(
+    settings.landing.first.bottom
+  );
+  const [landingFirstTextColor, setLandingFirstTextColor] = useState(
+    settings.landing.first.textColor
+  );
+  const [
+    landingFirstBottomTextColor,
+    setLandingFirstBottomTextColor,
+  ] = useState(settings.landing.first.bottomTextColor);
+  const [landingFirstIndicatorColor, setLandingFirstIndicatorColor] = useState(
+    settings.landing.first.indicatorColor
+  );
+
+  // Second page
+  const [landingSecondTop, setLandingSecondTop] = useState(
+    settings.landing.second.top
+  );
+  const [landingSecondBottom, setLandingSecondBottom] = useState(
+    settings.landing.second.bottom
+  );
+  const [landingSecondTextColor, setLandingSecondTextColor] = useState(
+    settings.landing.second.textColor
+  );
+  const [
+    landingSecondBottomTextColor,
+    setLandingSecondBottomTextColor,
+  ] = useState(settings.landing.second.bottomTextColor);
+  const [
+    landingSecondIndicatorColor,
+    setLandingSecondIndicatorColor,
+  ] = useState(settings.landing.second.indicatorColor);
+
+  // Third page
+  const [landingThirdTop, setLandingThirdTop] = useState(
+    settings.landing.third.top
+  );
+  const [landingThirdBottom, setLandingThirdBottom] = useState(
+    settings.landing.third.bottom
+  );
+  const [landingThirdTextColor, setLandingThirdTextColor] = useState(
+    settings.landing.third.textColor
+  );
+  const [
+    landingThirdBottomTextColor,
+    setLandingThirdBottomTextColor,
+  ] = useState(settings.landing.third.bottomTextColor);
+  const [landingThirdIndicatorColor, setLandingThirdIndicatorColor] = useState(
+    settings.landing.third.indicatorColor
+  );
+
+  // Fourth page
+  const [landingFourthTop, setLandingFourthTop] = useState(
+    settings.landing.fourth.top
+  );
+  const [landingFourthBottom, setLandingFourthBottom] = useState(
+    settings.landing.fourth.bottom
+  );
+  const [landingFourthTextColor, setLandingFourthTextColor] = useState(
+    settings.landing.fourth.textColor
+  );
+  const [
+    landingFourthBottomTextColor,
+    setLandingFourthBottomTextColor,
+  ] = useState(settings.landing.fourth.bottomTextColor);
+  const [
+    landingFourthIndicatorColor,
+    setLandingFourthIndicatorColor,
+  ] = useState(settings.landing.fourth.indicatorColor);
+
   // other Settings
   const [otherTheme, setOtherTheme] = useState(settings.others.theme);
 
@@ -155,6 +232,31 @@ const Settings = ({ navigation }) => {
     setFlowerColor1(settings.flower.color1);
     setFlowerColor2(settings.flower.color2);
     setFlowerAdditionalOptions(settings.flower.additionalOptions);
+
+    setLandingFirstTop(settings.landing.first.top);
+    setLandingFirstBottom(settings.landing.first.bottom);
+    setLandingFirstTextColor(settings.landing.first.textColor);
+    setLandingFirstBottomTextColor(settings.landing.first.bottomTextColor);
+    setLandingFirstIndicatorColor(settings.landing.first.indicatorColor);
+
+    setLandingSecondTop(settings.landing.second.top);
+    setLandingSecondBottom(settings.landing.second.bottom);
+    setLandingSecondTextColor(settings.landing.second.textColor);
+    setLandingSecondBottomTextColor(settings.landing.second.bottomTextColor);
+    setLandingSecondIndicatorColor(settings.landing.second.indicatorColor);
+
+    setLandingThirdTop(settings.landing.third.top);
+    setLandingThirdBottom(settings.landing.third.bottom);
+    setLandingThirdTextColor(settings.landing.third.textColor);
+    setLandingThirdBottomTextColor(settings.landing.third.bottomTextColor);
+    setLandingThirdIndicatorColor(settings.landing.third.indicatorColor);
+
+    setLandingFourthTop(settings.landing.fourth.top);
+    setLandingFourthBottom(settings.landing.fourth.bottom);
+    setLandingFourthTextColor(settings.landing.fourth.textColor);
+    setLandingFourthBottomTextColor(settings.landing.fourth.bottomTextColor);
+    setLandingFourthIndicatorColor(settings.landing.fourth.indicatorColor);
+
     setOtherTheme(settings.others.theme);
   }, [settings]);
 
@@ -176,6 +278,36 @@ const Settings = ({ navigation }) => {
         color1: flowerColor1,
         color2: flowerColor2,
         additionalOptions: flowerAdditionalOptions,
+      },
+      landing: {
+        first: {
+          top: landingFirstTop,
+          bottom: landingFirstBottom,
+          textColor: landingFirstTextColor,
+          bottomTextColor: landingFirstBottomTextColor,
+          indicatorColor: landingFirstIndicatorColor,
+        },
+        second: {
+          top: landingSecondTop,
+          bottom: landingSecondBottom,
+          textColor: landingSecondTextColor,
+          bottomTextColor: landingSecondBottomTextColor,
+          indicatorColor: landingSecondIndicatorColor,
+        },
+        third: {
+          top: landingThirdTop,
+          bottom: landingThirdBottom,
+          textColor: landingThirdTextColor,
+          bottomTextColor: landingThirdBottomTextColor,
+          indicatorColor: landingThirdIndicatorColor,
+        },
+        fourth: {
+          top: landingFourthTop,
+          bottom: landingFourthBottom,
+          textColor: landingFourthTextColor,
+          bottomTextColor: landingFourthBottomTextColor,
+          indicatorColor: landingFourthIndicatorColor,
+        },
       },
       others: {
         theme: otherTheme,
@@ -445,6 +577,162 @@ const Settings = ({ navigation }) => {
         </View>
         <Divider size={1} color={themeColors.dividerColor} margin={5} />
         <View style={styles.screenHeading}>
+          <Text style={styles.screenHeadingText}>On Boarding Page:</Text>
+        </View>
+        <View style={styles.advice}>
+          <Text style={styles.adviceText}>
+            {`color settings for on boarding app.\n - top is Top color of background gradient\n - bottom is Bottom color of background gradient \n -- Remember that "bottom" color will decide the color of the image.\n - text color will decide top heading text color\n - bottom text color will decide bottom text color\n - indicator is for page indicaator color`}
+          </Text>
+        </View>
+        <Divider size={1} color={theme ? "#313131" : "#c1c1c1"} margin={5} />
+        <OptionColorSelector
+          title="first: top"
+          value={landingFirstTop}
+          onColorChange={setLandingFirstTop}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="first: bottom"
+          value={landingFirstBottom}
+          onColorChange={setLandingFirstBottom}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="first: text color"
+          value={landingFirstTextColor}
+          onColorChange={setLandingFirstTextColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="first: bottom text color"
+          value={landingFirstBottomTextColor}
+          onColorChange={setLandingFirstBottomTextColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="first: indicator"
+          value={landingFirstIndicatorColor}
+          onColorChange={setLandingFirstIndicatorColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+
+        <OptionColorSelector
+          title="second: top"
+          value={landingSecondTop}
+          onColorChange={setLandingSecondTop}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="second: bottom"
+          value={landingSecondBottom}
+          onColorChange={setLandingSecondBottom}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="second: text color"
+          value={landingSecondTextColor}
+          onColorChange={setLandingSecondTextColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="second: bottom text color"
+          value={landingSecondBottomTextColor}
+          onColorChange={setLandingSecondBottomTextColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="second: indicator"
+          value={landingSecondIndicatorColor}
+          onColorChange={setLandingSecondIndicatorColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+
+        <OptionColorSelector
+          title="third: top"
+          value={landingThirdTop}
+          onColorChange={setLandingThirdTop}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="third: bottom"
+          value={landingThirdBottom}
+          onColorChange={setLandingThirdBottom}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="third: text color"
+          value={landingThirdTextColor}
+          onColorChange={setLandingThirdTextColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="third: bottom text color"
+          value={landingThirdBottomTextColor}
+          onColorChange={setLandingThirdBottomTextColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="third: indicator"
+          value={landingThirdIndicatorColor}
+          onColorChange={setLandingThirdIndicatorColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+
+        <OptionColorSelector
+          title="fourth: top"
+          value={landingFourthTop}
+          onColorChange={setLandingFourthTop}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="fourth: bottom"
+          value={landingFourthBottom}
+          onColorChange={setLandingFourthBottom}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="fourth: text color"
+          value={landingFourthTextColor}
+          onColorChange={setLandingFourthTextColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="fourth: bottom text color"
+          value={landingFourthBottomTextColor}
+          onColorChange={setLandingFourthBottomTextColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+        <OptionColorSelector
+          title="fourth: indicator"
+          value={landingFourthIndicatorColor}
+          onColorChange={setLandingFourthIndicatorColor}
+          styles={styles}
+        />
+        <Divider size={1} color={themeColors.dividerColor} margin={5} />
+
+        <View style={styles.screenHeading}>
           <Text style={styles.screenHeadingText}>General</Text>
         </View>
         <View style={styles.advice}>
@@ -482,6 +770,39 @@ const Settings = ({ navigation }) => {
           </Pressable>
         </View>
       </ScrollView>
+    </View>
+  );
+};
+
+const OptionColorSelector = ({
+  title,
+  value,
+  onColorChange,
+  advice,
+  styles,
+}) => {
+  return (
+    <View style={styles.option}>
+      <View style={styles.optionSettings}>
+        <Text style={styles.optionText}>{title}</Text>
+        <View style={{ flexDirection: "row" }}>
+          <ColorSelector
+            value={value}
+            onChange={(color) => onColorChange(color)}
+            style={styles.colorbox}
+          />
+          <TextInput
+            value={value}
+            onChangeText={(e) => onColorChange(e)}
+            style={styles.inputBox}
+          ></TextInput>
+        </View>
+      </View>
+      {advice && (
+        <View style={styles.innerAdvice}>
+          <Text style={styles.innerAdviceText}>{advice}</Text>
+        </View>
+      )}
     </View>
   );
 };

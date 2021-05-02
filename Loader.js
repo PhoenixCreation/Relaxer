@@ -20,6 +20,36 @@ const defaultSettings = {
     color2: "#007CA0",
     additionalOptions: true,
   },
+  landing: {
+    first: {
+      top: "#add8e6",
+      bottom: "#6666ff",
+      textColor: "#4c43ff",
+      bottomTextColor: "#000000",
+      indicatorColor: "#0000ff",
+    },
+    second: {
+      top: "#90ee90",
+      bottom: "#008800",
+      textColor: "#009900",
+      bottomTextColor: "#ffffff",
+      indicatorColor: "#004400",
+    },
+    third: {
+      top: "#ffc0cb",
+      bottom: "#ff908b",
+      textColor: "#ff4444",
+      bottomTextColor: "#333333",
+      indicatorColor: "#ff4444",
+    },
+    fourth: {
+      top: "#ffc200",
+      bottom: "#ff8233",
+      textColor: "#ff6622",
+      bottomTextColor: "#444444",
+      indicatorColor: "#ffb612",
+    },
+  },
   others: {
     theme: "dark",
   },
