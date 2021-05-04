@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { PanGestureHandler, ScrollView } from "react-native-gesture-handler";
 import Animated, {
   interpolate,
@@ -47,19 +54,18 @@ const DATA = [
 ];
 const MAX = 200;
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const { settings } = useContext(LoaderContext);
 
   const theme = settings.others.theme === "light";
 
   const themeColors = {
-    color: theme ? "#121212" : "#c1c1c1",
+    color: theme ? "#121212" : "#eee",
     backgroundColor: theme ? "#f1f1f1" : "#212121",
   };
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
       backgroundColor: themeColors.backgroundColor,
     },
     header: {
@@ -92,10 +98,26 @@ const Home = () => {
       borderRadius: 10,
       overflow: "hidden",
     },
+    label: {
+      color: themeColors.color,
+      fontSize: 18,
+    },
+    setBtn: {
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+      borderRadius: 10,
+      backgroundColor: "#2155ff",
+      overflow: "hidden",
+    },
+    setBtnText: {
+      color: themeColors.color,
+      fontSize: 18,
+    },
   });
 
   const [data, setData] = useState(DATA);
   const [stressLevel, setStressLevel] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const posY = useSharedValue(0);
 
@@ -171,33 +193,69 @@ const Home = () => {
     };
   });
 
+  const lndicatorStyle = useAnimatedStyle(() => {
+    return {
+      width: 60,
+      height: MAX,
+      borderColor: interpolateColor(
+        posY.value,
+        [-MAX, -MAX / 2, 0],
+        [
+          { r: 0, g: 255, b: 0, a: 1 },
+          { r: 0, g: 0, b: 255, a: 1 },
+          { r: 255, g: 0, b: 0, a: 1 },
+        ]
+      ),
+      borderWidth: 1,
+      justifyContent: "flex-end",
+      margin: 10,
+    };
+  });
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      style={{ backgroundColor: themeColors.backgroundColor }}
+      contentContainerStyle={styles.container}
+    >
       <View style={styles.header}>
         <Text style={styles.headerText}>How much stressed are you?</Text>
       </View>
       <View style={styles.incdicatorContainer}>
-        <AnimatedLabel text={level} />
+        <AnimatedLabel text={level} style={styles.label} />
         <PanGestureHandler onGestureEvent={gestureHandler}>
-          <Animated.View
-            style={{
-              width: 60,
-              height: MAX,
-              borderColor: "black",
-              borderWidth: 2,
-              justifyContent: "flex-end",
-            }}
-          >
+          <Animated.View style={lndicatorStyle}>
             <Text style={styles.slideAdvice} numberOfLines={1}>
               Slide on bar to change levels
             </Text>
             <Animated.View style={containerStyle}></Animated.View>
           </Animated.View>
         </PanGestureHandler>
+        <TouchableOpacity
+          onPress={() => {
+            setLoading(!loading);
+          }}
+        >
+          <View style={styles.setBtn}>
+            <Text style={styles.setBtnText}>Set today's stress level</Text>
+          </View>
+        </TouchableOpacity>
       </View>
-      <View style={styles.chartCont}>
-        <BarChart data={data} height={200} />
-      </View>
+      {loading ? (
+        <View
+          style={{
+            flex: 1,
+            height: 200,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ActivityIndicator size="large" color="#00aa00" />
+        </View>
+      ) : (
+        <View style={styles.chartCont}>
+          <BarChart data={data} height={150} />
+        </View>
+      )}
     </ScrollView>
   );
 };
