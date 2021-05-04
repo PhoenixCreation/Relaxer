@@ -26,30 +26,37 @@ const DATA = [
   {
     day: "Sun",
     value: 10,
+    maxValue: 70,
   },
   {
     day: "Mon",
     value: 5,
+    maxValue: 20,
   },
   {
     day: "Tue",
     value: 50,
+    maxValue: 70,
   },
   {
     day: "Wed",
     value: 90,
+    maxValue: 100,
   },
   {
     day: "Thu",
     value: 100,
+    maxValue: 100,
   },
   {
     day: "Fri",
     value: 40,
+    maxValue: 60,
   },
   {
     day: "Sat",
     value: 70,
+    maxValue: 80,
   },
 ];
 const MAX = 200;
@@ -171,9 +178,7 @@ const Home = ({ navigation }) => {
   });
 
   const level = useDerivedValue(() => {
-    const per = parseInt(
-      interpolate(posY.value, [0, -MAX], [0, 100])
-    ).toString();
+    const per = parseInt(interpolate(posY.value, [0, -MAX], [0, 100]));
     return per + "%";
   });
 

@@ -8,8 +8,6 @@ import Animated, {
 } from "react-native-reanimated";
 import Divider from "./Divider";
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
 const HEIGHT = 175;
 
 const BarChart = ({ data, height }) => {
@@ -18,6 +16,7 @@ const BarChart = ({ data, height }) => {
   );
   const MAX_VALUE = data.reduce((acc, current) => {
     if (acc < current.value) return current.value;
+    else if (acc < current?.maxValue) return current.maxValue;
     else return acc;
   }, 0);
   const POINTS = [
@@ -52,6 +51,28 @@ const BarChart = ({ data, height }) => {
                     dt={dt}
                     max={MAX_VALUE}
                     currentSelection={currentSelection}
+                    index={i}
+                  />
+                );
+              })}
+            </View>
+            <View
+              style={{
+                ...styles.chart,
+                ...StyleSheet.absoluteFillObject,
+                zIndex: -1,
+                borderWidth: 1,
+                borderColor: "yellow",
+                paddingHorizontal: 9,
+              }}
+            >
+              {data.map((dt, i) => {
+                return (
+                  <ChartMaxBar
+                    key={i}
+                    onSelected={setCurrentSelection}
+                    dt={dt}
+                    max={MAX_VALUE}
                     index={i}
                   />
                 );
@@ -107,6 +128,38 @@ const ChartBar = ({ onSelected, dt, max, currentSelection, index }) => {
       <Animated.View style={style}>
         <Text style={styles.chartFooter}>{dt.day}</Text>
       </Animated.View>
+    </Pressable>
+  );
+};
+
+const ChartMaxBar = ({ onSelected, dt, max, index }) => {
+  const delay = index * 300;
+
+  const progress = useSharedValue(0);
+
+  useEffect(() => {
+    setTimeout(() => {
+      progress.value = withTiming(1);
+    }, delay);
+  }, []);
+
+  const MAX_HEIGHT = parseInt((dt.maxValue / max) * 100);
+
+  const style = useAnimatedStyle(() => {
+    return {
+      width: 15,
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+      alignItems: "center",
+      marginVertical: StyleSheet.hairlineWidth,
+      height: interpolate(progress.value, [0, 1], [0, MAX_HEIGHT]) + "%",
+      backgroundColor: "#ff2323",
+    };
+  });
+
+  return (
+    <Pressable onPress={() => onSelected(dt)}>
+      <Animated.View style={style}></Animated.View>
     </Pressable>
   );
 };
