@@ -9,23 +9,34 @@ import Animated, {
 import Divider from "./Divider";
 
 const HEIGHT = 175;
+function useForceUpdate() {
+  const [value, setValue] = useState(0); // integer state
+  return () => setValue((value) => value + 1); // update the state to force render
+}
 
 const BarChart = ({ data, height }) => {
+  const forceUpdate = useForceUpdate();
   const [currentSelection, setCurrentSelection] = useState(
     data[data.length - 1]
   );
-  const MAX_VALUE = data.reduce((acc, current) => {
-    if (acc < current.value) return current.value;
-    else if (acc < current?.maxValue) return current.maxValue;
-    else return acc;
-  }, 0);
-  const POINTS = [
+  const [MAX_VALUE, setMAX_VALUE] = useState(
+    data.reduce((acc, current) => {
+      if (acc < current?.maxValue) return current.maxValue;
+      else if (acc < current.value) return current.value;
+      else return acc;
+    }, 0)
+  );
+  const [POINTS, setPOINTS] = useState([
     0,
     parseInt(MAX_VALUE / 4),
     parseInt(MAX_VALUE / 2),
     parseInt(MAX_VALUE / 1.33),
     parseInt(MAX_VALUE),
-  ];
+  ]);
+
+  useEffect(() => {
+    forceUpdate();
+  }, [data]);
 
   return (
     <View style={styles.container}>
@@ -61,9 +72,6 @@ const BarChart = ({ data, height }) => {
                 ...styles.chart,
                 ...StyleSheet.absoluteFillObject,
                 zIndex: -1,
-                borderWidth: 1,
-                borderColor: "yellow",
-                paddingHorizontal: 9,
               }}
             >
               {data.map((dt, i) => {
@@ -202,7 +210,7 @@ const styles = StyleSheet.create({
   dividersCont: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "space-between",
-    zIndex: 0,
+    zIndex: -2,
   },
   chart: {
     flex: 1,

@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
@@ -6,6 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
+  ToastAndroid,
 } from "react-native";
 import { PanGestureHandler, ScrollView } from "react-native-gesture-handler";
 import Animated, {
@@ -60,6 +62,12 @@ const DATA = [
   },
 ];
 const MAX = 200;
+const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const DEFAULT_DATA = DAYS.map((day) => ({
+  day,
+  value: 0,
+  maxValue: 0,
+}));
 
 const Home = ({ navigation }) => {
   const { settings } = useContext(LoaderContext);
@@ -125,6 +133,45 @@ const Home = ({ navigation }) => {
   const [data, setData] = useState(DATA);
   const [stressLevel, setStressLevel] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [weekCount, setWeekCount] = useState(
+    parseInt((new Date().getTime() - 2 * 24 * 3600000) / (7 * 24 * 3600000))
+  );
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    const jsonValue = await AsyncStorage.getItem(`@Relaxer/${weekCount}`);
+    if (!jsonValue) {
+      await AsyncStorage.setItem(
+        `@Relaxer/${weekCount}`,
+        JSON.stringify(DEFAULT_DATA)
+      );
+      setData(DEFAULT_DATA);
+      setLoading(false);
+    } else {
+      setData(JSON.parse(jsonValue));
+      setLoading(false);
+    }
+  };
+
+  const setNewStressLevel = async () => {
+    const oldData = data;
+    const index = new Date().getDay();
+    let value = stressLevel;
+    let maxValue =
+      stressLevel > oldData[index].maxValue
+        ? stressLevel
+        : oldData[index].maxValue;
+    oldData[index] = { ...oldData[index], value, maxValue };
+    setData(oldData);
+    await AsyncStorage.setItem(
+      `@Relaxer/${weekCount}`,
+      JSON.stringify(oldData)
+    );
+    ToastAndroid.show("Updated today's stress level", ToastAndroid.LONG);
+  };
 
   const posY = useSharedValue(0);
 
@@ -235,11 +282,7 @@ const Home = ({ navigation }) => {
             <Animated.View style={containerStyle}></Animated.View>
           </Animated.View>
         </PanGestureHandler>
-        <TouchableOpacity
-          onPress={() => {
-            setLoading(!loading);
-          }}
-        >
+        <TouchableOpacity onPress={() => setNewStressLevel()}>
           <View style={styles.setBtn}>
             <Text style={styles.setBtnText}>Set today's stress level</Text>
           </View>
