@@ -9,13 +9,33 @@ import Animated, {
 import Divider from "./Divider";
 
 const HEIGHT = 175;
-function useForceUpdate() {
-  const [value, setValue] = useState(0); // integer state
-  return () => setValue((value) => value + 1); // update the state to force render
-}
+
+const interpolateColor = (value, inputArray, outputArray) => {
+  "worklet";
+  const r = interpolate(
+    value,
+    inputArray,
+    outputArray.map((col) => col.r)
+  );
+  const g = interpolate(
+    value,
+    inputArray,
+    outputArray.map((col) => col.g)
+  );
+  const b = interpolate(
+    value,
+    inputArray,
+    outputArray.map((col) => col.b)
+  );
+  const a = interpolate(
+    value,
+    inputArray,
+    outputArray.map((col) => col.a)
+  );
+  return `rgba(${r},${g},${b},${a})`;
+};
 
 const BarChart = ({ data, height }) => {
-  const forceUpdate = useForceUpdate();
   const [currentSelection, setCurrentSelection] = useState(
     data[data.length - 1]
   );
@@ -34,15 +54,21 @@ const BarChart = ({ data, height }) => {
     parseInt(MAX_VALUE),
   ]);
 
-  useEffect(() => {
-    forceUpdate();
-  }, [data]);
-
   return (
     <View style={styles.container}>
+      <View style={styles.barInfoCont}>
+        <View style={styles.barInfo}>
+          <View style={{ ...styles.barColor, backgroundColor: "#46f" }}></View>
+          <Text style={styles.barName}>End</Text>
+        </View>
+        <View style={styles.barInfo}>
+          <View style={{ ...styles.barColor, backgroundColor: "#f33" }}></View>
+          <Text style={styles.barName}>Max</Text>
+        </View>
+      </View>
       <View style={styles.header}>
         <Text style={styles.headerText}>
-          {JSON.stringify(currentSelection.value)}
+          {`Max: ${currentSelection.maxValue}, End: ${currentSelection.value}`}
         </Text>
       </View>
       <View style={styles.chartCont}>
@@ -105,14 +131,10 @@ const BarChart = ({ data, height }) => {
 export default BarChart;
 
 const ChartBar = ({ onSelected, dt, max, currentSelection, index }) => {
-  const delay = index * 300;
-
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    setTimeout(() => {
-      progress.value = withTiming(1);
-    }, delay);
+    progress.value = withTiming(1);
   }, []);
 
   const MAX_HEIGHT = parseInt((dt.value / max) * 100);
@@ -132,7 +154,14 @@ const ChartBar = ({ onSelected, dt, max, currentSelection, index }) => {
   });
 
   return (
-    <Pressable onPress={() => onSelected(dt)}>
+    <Pressable
+      onPress={() => onSelected(dt)}
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Animated.View style={style}>
         <Text style={styles.chartFooter}>{dt.day}</Text>
       </Animated.View>
@@ -141,14 +170,10 @@ const ChartBar = ({ onSelected, dt, max, currentSelection, index }) => {
 };
 
 const ChartMaxBar = ({ onSelected, dt, max, index }) => {
-  const delay = index * 300;
-
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    setTimeout(() => {
-      progress.value = withTiming(1);
-    }, delay);
+    progress.value = withTiming(1);
   }, []);
 
   const MAX_HEIGHT = parseInt((dt.maxValue / max) * 100);
@@ -166,7 +191,14 @@ const ChartMaxBar = ({ onSelected, dt, max, index }) => {
   });
 
   return (
-    <Pressable onPress={() => onSelected(dt)}>
+    <Pressable
+      onPress={() => onSelected(dt)}
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Animated.View style={style}></Animated.View>
     </Pressable>
   );
@@ -182,7 +214,6 @@ const styles = StyleSheet.create({
   },
   header: {
     width: "100%",
-    alignItems: "center",
     marginBottom: 15,
   },
   headerText: {
@@ -225,5 +256,28 @@ const styles = StyleSheet.create({
     bottom: -20,
     width: 30,
     textAlign: "center",
+    zIndex: 50,
+  },
+  barInfoCont: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    margin: 10,
+    paddingLeft: 5,
+    paddingRight: 15,
+  },
+  barInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  barColor: {
+    width: 10,
+    height: 10,
+    borderRadius: 10,
+    backgroundColor: "red",
+    marginRight: 5,
+  },
+  barName: {
+    color: "#d1d1d1",
   },
 });

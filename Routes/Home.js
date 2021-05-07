@@ -29,36 +29,43 @@ const DATA = [
     day: "Sun",
     value: 10,
     maxValue: 70,
+    modified: false,
   },
   {
     day: "Mon",
     value: 5,
     maxValue: 20,
+    modified: false,
   },
   {
     day: "Tue",
     value: 50,
     maxValue: 70,
+    modified: false,
   },
   {
     day: "Wed",
     value: 90,
     maxValue: 100,
+    modified: false,
   },
   {
     day: "Thu",
     value: 100,
     maxValue: 100,
+    modified: false,
   },
   {
     day: "Fri",
     value: 40,
     maxValue: 60,
+    modified: false,
   },
   {
     day: "Sat",
     value: 70,
     maxValue: 80,
+    modified: false,
   },
 ];
 const MAX = 200;
@@ -67,6 +74,7 @@ const DEFAULT_DATA = DAYS.map((day) => ({
   day,
   value: 0,
   maxValue: 0,
+  modified: false,
 }));
 
 const Home = ({ navigation }) => {
@@ -115,7 +123,8 @@ const Home = ({ navigation }) => {
     },
     label: {
       color: themeColors.color,
-      fontSize: 18,
+      fontSize: 16,
+      width: "100%",
     },
     setBtn: {
       paddingHorizontal: 10,
@@ -128,6 +137,18 @@ const Home = ({ navigation }) => {
       color: themeColors.color,
       fontSize: 18,
     },
+    summaryCont: {
+      padding: 10,
+    },
+    summaryHeading: {
+      fontSize: 19,
+      fontWeight: "bold",
+      color: themeColors.color,
+    },
+    summary: {
+      fontSize: 16,
+      color: themeColors.color,
+    },
   });
 
   const [data, setData] = useState(DATA);
@@ -136,10 +157,20 @@ const Home = ({ navigation }) => {
   const [weekCount, setWeekCount] = useState(
     parseInt((new Date().getTime() - 2 * 24 * 3600000) / (7 * 24 * 3600000))
   );
+  const [summaryInfo, setSummaryInfo] = useState({
+    average: 0,
+    averageMax: 0,
+    difference: 0,
+  });
 
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    // TODO:// useEffect not working? why? God knows
+    console.log(Math.random());
+  }, [data]);
 
   const getData = async () => {
     const jsonValue = await AsyncStorage.getItem(`@Relaxer/${weekCount}`);
@@ -157,20 +188,40 @@ const Home = ({ navigation }) => {
   };
 
   const setNewStressLevel = async () => {
-    const oldData = data;
-    const index = new Date().getDay();
-    let value = stressLevel;
-    let maxValue =
-      stressLevel > oldData[index].maxValue
-        ? stressLevel
-        : oldData[index].maxValue;
-    oldData[index] = { ...oldData[index], value, maxValue };
-    setData(oldData);
-    await AsyncStorage.setItem(
-      `@Relaxer/${weekCount}`,
-      JSON.stringify(oldData)
-    );
-    ToastAndroid.show("Updated today's stress level", ToastAndroid.LONG);
+    try {
+      setLoading(true);
+      const oldData = data;
+      const index = new Date().getDay();
+      let value = stressLevel;
+      let maxValue =
+        stressLevel > oldData[index].maxValue
+          ? stressLevel
+          : oldData[index].maxValue;
+      oldData[index] = { ...oldData[index], value, maxValue, modified: true };
+      setData(oldData);
+      const effectiveDays = oldData.reduce((acc, crnt) => {
+        return acc + crnt.modified;
+      }, 0);
+      const averageEOD = oldData.reduce((acc, crnt) => acc + crnt.value, 0);
+      const averageMax = oldData.reduce((acc, crnt) => acc + crnt.maxValue, 0);
+      const difference = oldData.reduce(
+        (acc, crnt) => acc + (crnt.maxValue - crnt.value),
+        0
+      );
+      setSummaryInfo({
+        average: parseInt(averageEOD / effectiveDays),
+        averageMax: parseInt(averageMax / effectiveDays),
+        difference: parseInt(difference / effectiveDays),
+      });
+      await AsyncStorage.setItem(
+        `@Relaxer/${weekCount}`,
+        JSON.stringify(oldData)
+      );
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log("At setting current new level of stress => ", error);
+    }
   };
 
   const posY = useSharedValue(0);
@@ -226,7 +277,10 @@ const Home = ({ navigation }) => {
 
   const level = useDerivedValue(() => {
     const per = parseInt(interpolate(posY.value, [0, -MAX], [0, 100]));
-    return per + "%";
+    let levelLevel = "Low";
+    if (per > 25 && per < 67) levelLevel = "Medium";
+    if (per >= 67) levelLevel = "High";
+    return `< ${per}% (${levelLevel})`;
   });
 
   const containerStyle = useAnimatedStyle(() => {
@@ -261,6 +315,7 @@ const Home = ({ navigation }) => {
       borderWidth: 1,
       justifyContent: "flex-end",
       margin: 10,
+      marginBottom: 20,
     };
   });
 
@@ -273,13 +328,22 @@ const Home = ({ navigation }) => {
         <Text style={styles.headerText}>How much stressed are you?</Text>
       </View>
       <View style={styles.incdicatorContainer}>
-        <AnimatedLabel text={level} style={styles.label} />
         <PanGestureHandler onGestureEvent={gestureHandler}>
           <Animated.View style={lndicatorStyle}>
             <Text style={styles.slideAdvice} numberOfLines={1}>
               Slide on bar to change levels
             </Text>
-            <Animated.View style={containerStyle}></Animated.View>
+            <Animated.View style={containerStyle}>
+              <View
+                style={{
+                  position: "absolute",
+                  left: 60,
+                  top: -14,
+                }}
+              >
+                <AnimatedLabel text={level} style={styles.label} />
+              </View>
+            </Animated.View>
           </Animated.View>
         </PanGestureHandler>
         <TouchableOpacity onPress={() => setNewStressLevel()}>
@@ -304,6 +368,23 @@ const Home = ({ navigation }) => {
           <BarChart data={data} height={150} />
         </View>
       )}
+      <View style={styles.summaryCont}>
+        <Text style={styles.summaryHeading}>This week:</Text>
+        <Text style={styles.summary}>
+          - Avarage stress level at end of the day: {`\n`}{" "}
+          <Text>{summaryInfo.average}</Text>
+          {"%"}
+        </Text>
+        <Text style={styles.summary}>
+          - Avarage max stress level of the day: {`\n` + summaryInfo.averageMax}
+          {"%"}
+        </Text>
+        <Text style={styles.summary}>
+          - Avarage Decrement in your stress level:{" "}
+          {`\n` + summaryInfo.difference}
+          {"%"}
+        </Text>
+      </View>
     </ScrollView>
   );
 };
