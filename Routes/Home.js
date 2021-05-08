@@ -167,11 +167,6 @@ const Home = ({ navigation }) => {
     getData();
   }, []);
 
-  useEffect(() => {
-    // TODO:// useEffect not working? why? God knows
-    console.log(Math.random());
-  }, [data]);
-
   const getData = async () => {
     const jsonValue = await AsyncStorage.getItem(`@Relaxer/${weekCount}`);
     if (!jsonValue) {
