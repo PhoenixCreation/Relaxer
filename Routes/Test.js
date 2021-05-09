@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import BarChart from "../Components/Helpers/BarChart";
 
-// import { Divider, TouchHere } from "phoenix-rn-helper";
+import { Divider, TouchHere, CheckBox } from "phoenix-rn-helper";
 
 const data = [
   {
@@ -39,7 +39,9 @@ const { width, height } = Dimensions.get("window");
 const Test = () => {
   return (
     <View style={styles.container}>
-      <BarChart data={data} height={150} />
+      <View>
+        <Divider size={10} />
+      </View>
     </View>
   );
 };
