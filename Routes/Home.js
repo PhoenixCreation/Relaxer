@@ -155,7 +155,12 @@ const Home = ({ navigation }) => {
   const [stressLevel, setStressLevel] = useState(0);
   const [loading, setLoading] = useState(true);
   const [weekCount, setWeekCount] = useState(
-    parseInt((new Date().getTime() - 2 * 24 * 3600000) / (7 * 24 * 3600000))
+    parseInt(
+      (new Date().getTime() -
+        new Date().getTimezoneOffset() * 60 * 1000 -
+        3 * 24 * 3600000) /
+        (7 * 24 * 3600000)
+    )
   );
   const [summaryInfo, setSummaryInfo] = useState({
     average: 0,
@@ -168,7 +173,9 @@ const Home = ({ navigation }) => {
   }, []);
 
   const getData = async () => {
+    // console.log(await AsyncStorage.getAllKeys());
     const jsonValue = await AsyncStorage.getItem(`@Relaxer/${weekCount}`);
+
     if (!jsonValue) {
       await AsyncStorage.setItem(
         `@Relaxer/${weekCount}`,
@@ -319,6 +326,7 @@ const Home = ({ navigation }) => {
       style={{ backgroundColor: themeColors.backgroundColor }}
       contentContainerStyle={styles.container}
     >
+      <Text style={styles.headerText}>{JSON.stringify(weekCount)}</Text>
       <View style={styles.header}>
         <Text style={styles.headerText}>How much stressed are you?</Text>
       </View>
