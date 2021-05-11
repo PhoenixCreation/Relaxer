@@ -134,7 +134,7 @@ const ChartBar = ({ onSelected, dt, max, currentSelection, index }) => {
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    progress.value = withTiming(1);
+    progress.value = withTiming(1, { duration: 2500 });
   }, []);
 
   const MAX_HEIGHT = parseInt((dt.value / max) * 100);
@@ -173,7 +173,7 @@ const ChartMaxBar = ({ onSelected, dt, max, index }) => {
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    progress.value = withTiming(1);
+    progress.value = withTiming(1, { duration: 2500 });
   }, []);
 
   const MAX_HEIGHT = parseInt((dt.maxValue / max) * 100);

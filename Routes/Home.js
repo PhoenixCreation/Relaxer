@@ -20,6 +20,7 @@ import Animated, {
 } from "react-native-reanimated";
 import AnimatedLabel from "../Components/Helpers/AnimatedLabel";
 import BarChart from "../Components/Helpers/BarChart";
+import RoundChart from "../Components/Helpers/RoundChart";
 import { LoaderContext } from "../Loader";
 
 const { width, height } = Dimensions.get("window");
@@ -146,8 +147,26 @@ const Home = ({ navigation }) => {
       color: themeColors.color,
     },
     summary: {
-      fontSize: 16,
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    summaryTagCont: {
+      justifyContent: "center",
+    },
+    summaryTag: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    summaryTagColor: {
+      width: 20,
+      height: 10,
+      borderRadius: 5,
+      backgroundColor: "red",
+      marginRight: 5,
+    },
+    summaryTagText: {
       color: themeColors.color,
+      fontSize: 12,
     },
   });
 
@@ -184,7 +203,22 @@ const Home = ({ navigation }) => {
       setData(DEFAULT_DATA);
       setLoading(false);
     } else {
-      setData(JSON.parse(jsonValue));
+      const newData = JSON.parse(jsonValue);
+      setData(newData);
+      const effectiveDays = newData.reduce((acc, crnt) => {
+        return acc + crnt.modified;
+      }, 0);
+      const averageEOD = newData.reduce((acc, crnt) => acc + crnt.value, 0);
+      const averageMax = newData.reduce((acc, crnt) => acc + crnt.maxValue, 0);
+      const difference = newData.reduce(
+        (acc, crnt) => acc + (crnt.maxValue - crnt.value),
+        0
+      );
+      setSummaryInfo({
+        average: parseInt(averageEOD / effectiveDays),
+        averageMax: parseInt(averageMax / effectiveDays),
+        difference: parseInt(difference / effectiveDays),
+      });
       setLoading(false);
     }
   };
@@ -326,7 +360,6 @@ const Home = ({ navigation }) => {
       style={{ backgroundColor: themeColors.backgroundColor }}
       contentContainerStyle={styles.container}
     >
-      <Text style={styles.headerText}>{JSON.stringify(weekCount)}</Text>
       <View style={styles.header}>
         <Text style={styles.headerText}>How much stressed are you?</Text>
       </View>
@@ -373,20 +406,42 @@ const Home = ({ navigation }) => {
       )}
       <View style={styles.summaryCont}>
         <Text style={styles.summaryHeading}>This week:</Text>
-        <Text style={styles.summary}>
-          - Avarage stress level at end of the day: {`\n`}{" "}
-          <Text>{summaryInfo.average}</Text>
-          {"%"}
-        </Text>
-        <Text style={styles.summary}>
-          - Avarage max stress level of the day: {`\n` + summaryInfo.averageMax}
-          {"%"}
-        </Text>
-        <Text style={styles.summary}>
-          - Avarage Decrement in your stress level:{" "}
-          {`\n` + summaryInfo.difference}
-          {"%"}
-        </Text>
+        <View style={styles.summary}>
+          <RoundChart
+            values={[
+              summaryInfo.average / 100,
+              summaryInfo.averageMax / 100,
+              summaryInfo.difference / 100,
+            ]}
+            colors={["#23f", "red", "green"]}
+          />
+          <View style={styles.summaryTagCont}>
+            <View style={styles.summaryTag}>
+              <View
+                style={{ ...styles.summaryTagColor, backgroundColor: "#23f" }}
+              />
+              <Text style={styles.summaryTagText}>
+                Average End {`(${summaryInfo.average}%)`}
+              </Text>
+            </View>
+            <View style={styles.summaryTag}>
+              <View
+                style={{ ...styles.summaryTagColor, backgroundColor: "red" }}
+              />
+              <Text style={styles.summaryTagText}>
+                Average Max {`(${summaryInfo.averageMax}%)`}
+              </Text>
+            </View>
+            <View style={styles.summaryTag}>
+              <View
+                style={{ ...styles.summaryTagColor, backgroundColor: "green" }}
+              />
+              <Text style={styles.summaryTagText}>
+                Average Drop {`(${summaryInfo.difference}%)`}
+              </Text>
+            </View>
+          </View>
+        </View>
       </View>
     </ScrollView>
   );

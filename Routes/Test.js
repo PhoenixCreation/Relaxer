@@ -1,47 +1,13 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
-import BarChart from "../Components/Helpers/BarChart";
+import RoundChart from "../Components/Helpers/RoundChart";
 
-import { Divider, TouchHere, CheckBox } from "phoenix-rn-helper";
-
-const data = [
-  {
-    day: "Sun",
-    value: 10,
-  },
-  {
-    day: "Mon",
-    value: 5,
-  },
-  {
-    day: "Tue",
-    value: 50,
-  },
-  {
-    day: "Wed",
-    value: 90,
-  },
-  {
-    day: "Thu",
-    value: 100,
-  },
-  {
-    day: "Fri",
-    value: 40,
-  },
-  {
-    day: "Sat",
-    value: 70,
-  },
-];
-const { width, height } = Dimensions.get("window");
+// import { Divider, TouchHere, CheckBox } from "phoenix-rn-helper";
 
 const Test = () => {
   return (
     <View style={styles.container}>
-      <View>
-        <Divider size={10} />
-      </View>
+      <RoundChart colors={["lightblue", "grey", "orange", "pink"]} />
     </View>
   );
 };
