@@ -152,6 +152,7 @@ const Home = ({ navigation }) => {
     },
     summaryTagCont: {
       justifyContent: "center",
+      marginLeft: -20,
     },
     summaryTag: {
       flexDirection: "row",
@@ -404,45 +405,65 @@ const Home = ({ navigation }) => {
           <BarChart data={data} height={150} />
         </View>
       )}
-      <View style={styles.summaryCont}>
-        <Text style={styles.summaryHeading}>This week:</Text>
-        <View style={styles.summary}>
-          <RoundChart
-            values={[
-              summaryInfo.average / 100,
-              summaryInfo.averageMax / 100,
-              summaryInfo.difference / 100,
-            ]}
-            colors={["#23f", "red", "green"]}
-          />
-          <View style={styles.summaryTagCont}>
-            <View style={styles.summaryTag}>
-              <View
-                style={{ ...styles.summaryTagColor, backgroundColor: "#23f" }}
+      {loading ? (
+        <View
+          style={{
+            flex: 1,
+            height: 200,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ActivityIndicator size="large" color="#f33442" />
+        </View>
+      ) : (
+        <View style={styles.summaryCont}>
+          <Text style={styles.summaryHeading}>This week:</Text>
+          <View style={styles.summary}>
+            <View style={{ transform: [{ scale: 0.8 }] }}>
+              <RoundChart
+                values={[
+                  summaryInfo.average / 100,
+                  // 1,
+                  summaryInfo.averageMax / 100,
+                  summaryInfo.difference / 100,
+                  // 1,
+                ]}
+                colors={["#23f", "red", "green"]}
               />
-              <Text style={styles.summaryTagText}>
-                Average End {`(${summaryInfo.average}%)`}
-              </Text>
             </View>
-            <View style={styles.summaryTag}>
-              <View
-                style={{ ...styles.summaryTagColor, backgroundColor: "red" }}
-              />
-              <Text style={styles.summaryTagText}>
-                Average Max {`(${summaryInfo.averageMax}%)`}
-              </Text>
-            </View>
-            <View style={styles.summaryTag}>
-              <View
-                style={{ ...styles.summaryTagColor, backgroundColor: "green" }}
-              />
-              <Text style={styles.summaryTagText}>
-                Average Drop {`(${summaryInfo.difference}%)`}
-              </Text>
+            <View style={styles.summaryTagCont}>
+              <View style={styles.summaryTag}>
+                <View
+                  style={{ ...styles.summaryTagColor, backgroundColor: "#23f" }}
+                />
+                <Text style={styles.summaryTagText}>
+                  Average End {`(${summaryInfo.average}%)`}
+                </Text>
+              </View>
+              <View style={styles.summaryTag}>
+                <View
+                  style={{ ...styles.summaryTagColor, backgroundColor: "red" }}
+                />
+                <Text style={styles.summaryTagText}>
+                  Average Max {`(${summaryInfo.averageMax}%)`}
+                </Text>
+              </View>
+              <View style={styles.summaryTag}>
+                <View
+                  style={{
+                    ...styles.summaryTagColor,
+                    backgroundColor: "green",
+                  }}
+                />
+                <Text style={styles.summaryTagText}>
+                  Average Drop {`(${summaryInfo.difference}%)`}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      )}
     </ScrollView>
   );
 };

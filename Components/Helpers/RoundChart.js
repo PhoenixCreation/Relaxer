@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import Svg, { Line, Path } from "react-native-svg";
 import Animated, {
   withTiming,
@@ -22,16 +22,32 @@ const RoundChart = ({ values, colors, style }) => {
     };
   });
 
+  const [current, setCurrent] = useState(null);
+
   return (
-    <View style={[styles.roundCont, style]}>
+    <Pressable
+      style={[styles.roundCont, style]}
+      onPress={() => setCurrent(null)}
+    >
       <Svg width={200} height={200} viewBox="-5 -5 115 115">
-        {thetas.map(({ theta, color }, i) => {
+        {thetas.map((crnt, i) => {
           return (
-            <RoundChartPath key={i} theta={theta} index={i} color={color} />
+            <RoundChartPath
+              key={i}
+              theta={crnt.theta}
+              index={i}
+              color={crnt.color}
+              opacity={current ? (current === values[i] ? 1 : 0.4) : 1}
+              category={values[i]}
+              setCurrent={setCurrent}
+            />
           );
         })}
       </Svg>
-    </View>
+      <Text style={styles.currentVal}>
+        {current ? `${current * 100}%` : null}
+      </Text>
+    </Pressable>
   );
 };
 
@@ -56,11 +72,20 @@ const createArc = (posx, posy, radius = R, angle) => {
     `;
 };
 
-const RoundChartPath = ({ theta, index, color }) => {
+const RoundChartPath = ({
+  theta,
+  index,
+  color,
+  opacity,
+  setCurrent,
+  category,
+}) => {
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    progress.value = withTiming(1, { duration: 2500 });
+    setTimeout(() => {
+      progress.value = withTiming(1, { duration: 2500 });
+    }, 1000);
   }, []);
 
   const animatedProps = useAnimatedProps(() => {
@@ -74,7 +99,14 @@ const RoundChartPath = ({ theta, index, color }) => {
     };
   });
 
-  return <AnimatedPath animatedProps={animatedProps} fill={color} />;
+  return (
+    <AnimatedPath
+      animatedProps={animatedProps}
+      fill={color}
+      opacity={opacity}
+      onPress={() => setCurrent(category)}
+    />
+  );
 };
 
 export default RoundChart;
@@ -82,5 +114,17 @@ export default RoundChart;
 const styles = StyleSheet.create({
   roundCont: {
     borderRadius: 10,
+    backgroundColor: "#313131",
+    marginRight: 10,
+    justifyContent: "center",
+    paddingTop: 10,
+    paddingRight: 10,
+  },
+  currentVal: {
+    position: "absolute",
+    alignSelf: "center",
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white",
   },
 });

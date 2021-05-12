@@ -20,10 +20,10 @@ const { width, height } = Dimensions.get("window");
 
 const NUMBER_OF_SLIDES = 4;
 
-const colorPalate = ["#0000ff", "#004400", "#ff4444", "#ffb612"];
+const colorPalate = ["#0000ff", "#004400", "#44bcff", "#9d5aff"];
 
 const LandingPage = () => {
-  const { removeFirsttime, settings } = useContext(LoaderContext);
+  const { removeFirsttime } = useContext(LoaderContext);
   const scroll = useRef();
   const [currentPage, setCurrentPage] = useState(1);
   const [touchIndicator, setTouchIndicator] = useState(true);
@@ -40,72 +40,32 @@ const LandingPage = () => {
 
   const colors = {
     first: {
-      top: settings?.landing?.first.top
-        ? settings?.landing?.first.top
-        : "#add8e6",
-      bottom: settings?.landing?.first.bottom
-        ? settings?.landing?.first.bottom
-        : "#6666ff",
-      textColor: settings?.landing?.first.textColor
-        ? settings?.landing?.first.textColor
-        : "#4c43ff",
-      bottomTextColor: settings?.landing?.first.bottomTextColor
-        ? settings?.landing?.first.bottomTextColor
-        : "#000000",
-      indicatorColor: settings?.landing?.first.indicatorColor
-        ? settings?.landing?.first.indicatorColor
-        : "#0000ff",
+      top: "#add8e6",
+      bottom: "#6666ff",
+      textColor: "#4c43ff",
+      bottomTextColor: "#000000",
+      indicatorColor: "#0000ff",
     },
     second: {
-      top: settings?.landing?.second.top
-        ? settings?.landing?.second.top
-        : "#90ee90",
-      bottom: settings?.landing?.second.bottom
-        ? settings?.landing?.second.bottom
-        : "#008800",
-      textColor: settings?.landing?.second.textColor
-        ? settings?.landing?.second.textColor
-        : "#009900",
-      bottomTextColor: settings?.landing?.second.bottomTextColor
-        ? settings?.landing?.second.bottomTextColor
-        : "#ffffff",
-      indicatorColor: settings?.landing?.second.indicatorColor
-        ? settings?.landing?.second.indicatorColor
-        : "#004400",
+      top: "#90ee90",
+      bottom: "#008800",
+      textColor: "#009900",
+      bottomTextColor: "#ffffff",
+      indicatorColor: "#004400",
     },
     third: {
-      top: settings?.landing?.third.top
-        ? settings?.landing?.third.top
-        : "#ffc0cb",
-      bottom: settings?.landing?.third.bottom
-        ? settings?.landing?.third.bottom
-        : "#ff908b",
-      textColor: settings?.landing?.third.textColor
-        ? settings?.landing?.third.textColor
-        : "#ff4444",
-      bottomTextColor: settings?.landing?.third.bottomTextColor
-        ? settings?.landing?.third.bottomTextColor
-        : "#333333",
-      indicatorColor: settings?.landing?.third.indicatorColor
-        ? settings?.landing?.third.indicatorColor
-        : "#ff4444",
+      top: "#cbb9ff",
+      bottom: "#a68bff",
+      textColor: "#9c41c5",
+      bottomTextColor: "#333333",
+      indicatorColor: "#44bcff",
     },
     fourth: {
-      top: settings?.landing?.fourth.top
-        ? settings?.landing?.fourth.top
-        : "#ffc200",
-      bottom: settings?.landing?.fourth.bottom
-        ? settings?.landing?.fourth.bottom
-        : "#ff8233",
-      textColor: settings?.landing?.fourth.textColor
-        ? settings?.landing?.fourth.textColor
-        : "#ff6622",
-      bottomTextColor: settings?.landing?.fourth.bottomTextColor
-        ? settings?.landing?.fourth.bottomTextColor
-        : "#444444",
-      indicatorColor: settings?.landing?.fourth.indicatorColor
-        ? settings?.landing?.fourth.indicatorColor
-        : "#ffb612",
+      top: "#9d5aff",
+      bottom: "#3388ff",
+      textColor: "#1500ff",
+      bottomTextColor: "#444444",
+      indicatorColor: "#9d5aff",
     },
   };
 

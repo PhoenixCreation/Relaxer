@@ -36,16 +36,12 @@ const interpolateColor = (value, inputArray, outputArray) => {
 };
 
 const BarChart = ({ data, height }) => {
-  const [currentSelection, setCurrentSelection] = useState(
-    data[data.length - 1]
-  );
-  const [MAX_VALUE, setMAX_VALUE] = useState(
-    data.reduce((acc, current) => {
-      if (acc < current?.maxValue) return current.maxValue;
-      else if (acc < current.value) return current.value;
-      else return acc;
-    }, 0)
-  );
+  const lastModified = data.reduce((acc, value) => {
+    if (value.modified) return data.indexOf(value);
+    else return acc;
+  }, 0);
+  const [currentSelection, setCurrentSelection] = useState(data[lastModified]);
+  const [MAX_VALUE, setMAX_VALUE] = useState(100);
   const [POINTS, setPOINTS] = useState([
     0,
     parseInt(MAX_VALUE / 4),
@@ -67,6 +63,7 @@ const BarChart = ({ data, height }) => {
         </View>
       </View>
       <View style={styles.header}>
+        <Text style={styles.headerText}>{`${currentSelection.day}`}</Text>
         <Text style={styles.headerText}>
           {`Max: ${currentSelection.maxValue}, End: ${currentSelection.value}`}
         </Text>
@@ -134,7 +131,7 @@ const ChartBar = ({ onSelected, dt, max, currentSelection, index }) => {
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    progress.value = withTiming(1, { duration: 2500 });
+    progress.value = withTiming(1, { duration: 1200 });
   }, []);
 
   const MAX_HEIGHT = parseInt((dt.value / max) * 100);
@@ -173,7 +170,7 @@ const ChartMaxBar = ({ onSelected, dt, max, index }) => {
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    progress.value = withTiming(1, { duration: 2500 });
+    progress.value = withTiming(1, { duration: 2000 });
   }, []);
 
   const MAX_HEIGHT = parseInt((dt.maxValue / max) * 100);
@@ -208,7 +205,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     padding: 10,
-    paddingVertical: 30,
+    paddingBottom: 30,
     justifyContent: "space-between",
     backgroundColor: "#313131",
   },

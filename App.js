@@ -93,7 +93,7 @@ const Navigator = () => {
             unmountOnBlur: true,
           }}
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="Test"
           component={Test}
           options={{
@@ -105,11 +105,12 @@ const Navigator = () => {
               />
             ),
           }}
-        />
+        /> */}
         <Drawer.Screen
           name="LandingPage"
           component={LandingPage}
           options={{
+            title: "Onboarding Page",
             drawerIcon: ({ focused, size }) => (
               <MaterialCommunityIcons
                 name="airplane-landing"
